@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" class="scroll-smooth">
+<html lang="cs">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -379,6 +379,14 @@
     nav.style.borderBottom = on ? '1px solid rgba(255,255,255,.07)' : '1px solid transparent';
   };
   addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  /* smooth anchor jumps (kept in JS: CSS scroll-behavior fights ScrollTrigger) */
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+  }));
 
   /* ---------- hero particles ---------- */
   const hero = document.getElementById('hero'), cv = document.getElementById('fx'), ctx = cv.getContext('2d');
