@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI1st – AI automatizace a vývoj na míru</title>
+<meta name="description" content="AI1st – automatizace procesů pomocí AI, Python aplikace a weby na míru. Filip Šerý, Praha.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0d12'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%237cf0c5'>AI</text></svg>">
+<style>
+  :root{--bg:#0b0d12;--panel:#12151d;--line:#232836;--text:#e8eaf0;--muted:#9aa1b2;--accent:#7cf0c5;--accent2:#7aa7ff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  header{position:sticky;top:0;z-index:10;background:rgba(11,13,18,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-weight:800;font-size:22px;letter-spacing:-.02em;text-decoration:none}
+  .logo span{color:var(--accent)}
+  nav a{color:var(--muted);text-decoration:none;margin-left:24px;font-size:15px}
+  nav a:hover{color:var(--text)}
+  .hero{padding:110px 0 90px;position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;inset:-40% -10% auto auto;width:640px;height:640px;background:radial-gradient(circle,rgba(124,240,197,.16),transparent 65%);pointer-events:none}
+  .tag{display:inline-block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(124,240,197,.35);padding:5px 12px;border-radius:999px;margin-bottom:26px}
+  h1{font-size:clamp(38px,6vw,68px);line-height:1.05;letter-spacing:-.035em;max-width:820px}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{font-size:20px;color:var(--muted);max-width:640px;margin:26px 0 38px}
+  .btn{display:inline-block;padding:14px 26px;border-radius:10px;font-weight:600;text-decoration:none;transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:var(--accent);color:#06140f}
+  .btn-ghost{border:1px solid var(--line);margin-left:10px}
+  section{padding:80px 0;border-top:1px solid var(--line)}
+  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.025em;margin-bottom:14px}
+  .sub{color:var(--muted);max-width:620px;margin-bottom:44px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px}
+  .card .n{font-family:ui-monospace,Menlo,monospace;color:var(--accent);font-size:14px;margin-bottom:14px}
+  .card h3{font-size:19px;margin-bottom:8px}
+  .card p{color:var(--muted);font-size:15.5px}
+  .steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+  .step{border-left:2px solid var(--line);padding-left:20px}
+  .step:before{counter-increment:s;content:"0" counter(s);display:block;font-family:ui-monospace,Menlo,monospace;color:var(--accent2);margin-bottom:8px}
+  .step h3{font-size:18px;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:15.5px}
+  .stack{display:flex;flex-wrap:wrap;gap:10px}
+  .stack span{border:1px solid var(--line);border-radius:8px;padding:7px 14px;font-size:14.5px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .contact{background:linear-gradient(135deg,rgba(124,240,197,.08),rgba(122,167,255,.08));border:1px solid var(--line);border-radius:18px;padding:56px;text-align:center}
+  .contact p{color:var(--muted);max-width:520px;margin:0 auto 30px}
+  footer{padding:36px 0;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  @media(max-width:640px){nav{display:none}.btn-ghost{margin:12px 0 0}.contact{padding:36px 22px}.hero{padding:70px 0 60px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="#">AI<span>1st</span></a>
+    <nav><a href="#sluzby">Služby</a><a href="#jak">Jak pracuji</a><a href="#kontakt">Kontakt</a></nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div class="tag">AI automatizace · vývoj na míru</div>
+      <h1>Rutinu nechte na AI.<br><em>Vy se věnujte práci, která má smysl.</em></h1>
+      <p class="lead">Navrhuji a stavím automatizace, interní nástroje a weby, které šetří čas. Od jednoduchého skriptu po AI agenta napojeného na vaše systémy.</p>
+      <a class="btn btn-primary" href="#kontakt">Probrat váš projekt</a><a class="btn btn-ghost" href="#sluzby">Co umím</a>
+    </div>
+  </div>
+
+  <section id="sluzby">
+    <div class="wrap">
+      <h2>Služby</h2>
+      <p class="sub">Žádné obecné AI poradenství. Konkrétní řešení, která běží a dají se měřit.</p>
+      <div class="grid">
+        <div class="card"><div class="n">01</div><h3>AI automatizace procesů</h3><p>Zpracování e-mailů, dokumentů a dat, generování podkladů, napojení AI modelů na vaše nástroje.</p></div>
+        <div class="card"><div class="n">02</div><h3>Python aplikace na míru</h3><p>Interní nástroje, datové pipeline a reporty, které nahradí ruční práci v Excelu.</p></div>
+        <div class="card"><div class="n">03</div><h3>AI agenti a integrace</h3><p>Asistenti napojení na vaše data a aplikace přes API a MCP, nasazení a provoz.</p></div>
+        <div class="card"><div class="n">04</div><h3>Weby</h3><p>Rychlé a moderní weby a landing pages, včetně domény, hostingu a správy.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="jak">
+    <div class="wrap">
+      <h2>Jak pracuji</h2>
+      <p class="sub">Krátké iterace, rychle něco funkčního v ruce, žádné měsíce analýz.</p>
+      <div class="steps">
+        <div class="step"><h3>Úvodní konzultace</h3><p>Projdeme, kde vám utíká čas, a najdeme, co se vyplatí automatizovat.</p></div>
+        <div class="step"><h3>Prototyp</h3><p>Rychlá funkční verze na reálných datech, abyste viděli přínos dřív, než investujete víc.</p></div>
+        <div class="step"><h3>Nasazení</h3><p>Dotažení do produkce, napojení na vaše systémy a zaškolení.</p></div>
+        <div class="step"><h3>Podpora</h3><p>Úpravy, údržba a další vylepšení podle toho, jak se řešení používá.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Technologie</h2>
+      <p class="sub">Vybírám nástroje podle úlohy, ne podle módy.</p>
+      <div class="stack"><span>Python</span><span>pandas</span><span>scikit-learn</span><span>LLM API</span><span>MCP</span><span>SQL</span><span>Java</span><span>C/C++</span><span>Bash</span><span>Linux</span><span>Git</span><span>WordPress</span></div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="wrap">
+      <div class="contact">
+        <h2>Máte proces, který vás zdržuje?</h2>
+        <p>Napište mi pár vět o tom, co řešíte. Ozvu se a domluvíme nezávaznou konzultaci.</p>
+        <a class="btn btn-primary" href="mailto:filseryx@gmail.com?subject=Poptávka%20z%20ai1st.cz">filseryx@gmail.com</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="y">2026</span> AI1st · Filip Šerý, Praha</span>
+    <span>ai1st.cz</span>
+  </div>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
