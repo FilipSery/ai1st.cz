@@ -81,6 +81,10 @@
 
   #progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--mint),var(--volt),var(--ultra));z-index:80}
   .big-word{font-size:clamp(4.5rem,19vw,19rem);line-height:.82;letter-spacing:-.06em;-webkit-text-stroke:1px rgba(255,255,255,.1);color:transparent;user-select:none}
+  .w{display:inline-block;will-change:transform,opacity}
+  .mf-w{opacity:.12}
+  .band{font-size:clamp(3.5rem,13vw,12rem);line-height:1;letter-spacing:-.05em;white-space:nowrap}
+  .band .o{-webkit-text-stroke:1px rgba(255,255,255,.22);color:transparent}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -209,6 +213,15 @@
   </div>
 </section>
 
+<!-- MANIFEST -->
+<section id="manifest" class="relative border-t border-white/[.07]">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 min-h-[100svh] flex flex-col justify-center py-24">
+    <div class="font-mono text-ultra text-sm mb-8">// proč to děláme</div>
+    <p id="manifest-text" class="font-display font-bold tracking-[-0.035em] leading-[1.08] text-[clamp(1.9rem,5.2vw,4.6rem)]">Většina firem AI jen zkouší. My ji zapojíme do provozu. Tak, aby ráno běžela sama a nikdo už nevzpomínal, že tu práci dřív dělal člověk.</p>
+    <div class="mt-12 h-px w-full bg-white/10 overflow-hidden"><i id="manifest-bar" class="block h-full w-full bg-gradient-to-r from-mint via-volt to-ultra" style="transform:scaleX(0);transform-origin:left"></i></div>
+  </div>
+</section>
+
 <!-- PIPELINE -->
 <section id="pipeline" class="relative py-28 md:py-40 border-t border-white/[.07] overflow-hidden">
   <div class="orb w-[500px] h-[500px] bg-volt -left-60 top-40 opacity-20"></div>
@@ -311,6 +324,12 @@
     </div>
   </div>
 </section>
+
+<!-- BAND -->
+<div id="band" class="relative py-10 md:py-16 border-t border-white/[.07] overflow-hidden font-display font-bold select-none" aria-hidden="true">
+  <div class="band band-a">MÉNĚ RUTINY <span class="o">MÉNĚ RUTINY</span> MÉNĚ RUTINY <span class="o">MÉNĚ RUTINY</span> MÉNĚ RUTINY</div>
+  <div class="band band-b text-mint">VÍC VÝSLEDKŮ <span class="o">VÍC VÝSLEDKŮ</span> VÍC VÝSLEDKŮ <span class="o">VÍC VÝSLEDKŮ</span> VÍC VÝSLEDKŮ</div>
+</div>
 
 <!-- CTA -->
 <section id="kontakt" class="relative py-32 md:py-48 border-t border-white/[.07] overflow-hidden">
@@ -484,6 +503,7 @@
 
   /* generic reveals */
   gsap.utils.toArray('.reveal').forEach(el => {
+    if (el.tagName === 'H2') return;
     gsap.from(el, {y:44, opacity:0, duration:1, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 88%'}});
   });
   ScrollTrigger.batch('.card-in', {
@@ -506,6 +526,79 @@
   gsap.fromTo('#bigword', {xPercent:12}, {xPercent:-12, ease:'none', scrollTrigger:{trigger:'#architekti', start:'top bottom', end:'bottom top', scrub:true}});
   gsap.fromTo('#cta-glow', {scale:.6, opacity:.4}, {scale:1.25, opacity:1, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top bottom', end:'center center', scrub:true}});
   gsap.to('#cta-glow', {rotate:360, duration:40, repeat:-1, ease:'none'});
+
+  /* ---------- extra scroll choreography ---------- */
+  const splitWords = (el, cls) => {
+    const out = [];
+    const walk = node => {
+      [...node.childNodes].forEach(n => {
+        if (n.nodeType === 3) {
+          const parts = n.textContent.split(' '), frag = document.createDocumentFragment();
+          parts.forEach((part, i) => {
+            if (part) { const s = document.createElement('span'); s.className = cls; s.textContent = part; frag.appendChild(s); out.push(s); }
+            if (i < parts.length - 1) frag.appendChild(document.createTextNode(' '));
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1) {
+          if (n.classList.contains('grad')) { n.classList.add('w'); out.push(n); } else walk(n);
+        }
+      });
+    };
+    walk(el); return out;
+  };
+
+  /* headings: word-by-word, tied to scroll */
+  gsap.utils.toArray('h2.reveal').forEach(h => {
+    const words = splitWords(h, 'w');
+    gsap.from(words, {yPercent:70, opacity:0, rotateX:-55, transformOrigin:'50% 100%', stagger:.08, ease:'power3.out',
+      scrollTrigger:{trigger:h, start:'top 92%', end:'top 48%', scrub:.6}});
+  });
+
+  /* hero lines drift apart */
+  gsap.utils.toArray('#hero .line').forEach((l, i) => {
+    gsap.to(l, {xPercent:[-9, 7, -5][i] || 0, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:true}});
+  });
+
+  /* marquee leans with scroll velocity */
+  const mq = document.querySelector('.marquee').parentElement;
+  const skew = gsap.quickTo(mq, 'skewX', {duration:.5, ease:'power3.out'});
+  ScrollTrigger.create({onUpdate: self => skew(gsap.utils.clamp(-14, 14, self.getVelocity() / -160))});
+  ScrollTrigger.addEventListener('scrollEnd', () => skew(0));
+
+  /* service cards: staggered parallax + icons */
+  if (matchMedia('(min-width:1024px)').matches) {
+    gsap.utils.toArray('#sluzby .glass').forEach((c, i) => {
+      gsap.fromTo(c, {y:30 + i * 45}, {y:-i * 30, ease:'none', scrollTrigger:{trigger:'#sluzby .grid', start:'top bottom', end:'bottom top', scrub:.6}});
+    });
+  }
+  gsap.utils.toArray('.icon-box').forEach(b => {
+    gsap.from(b, {rotate:-90, scale:.3, opacity:0, duration:1.1, ease:'back.out(1.7)', scrollTrigger:{trigger:b, start:'top 88%'}});
+  });
+
+  /* manifest: pinned, words light up */
+  const mw = splitWords(document.getElementById('manifest-text'), 'w mf-w');
+  const mtl = gsap.timeline({scrollTrigger:{trigger:'#manifest', start:'top top', end:'+=130%', pin:true, scrub:.5}});
+  mtl.to(mw, {opacity:1, stagger:.08, ease:'none', duration:.3});
+  mtl.to('#manifest-bar', {scaleX:1, ease:'none', duration:mtl.duration()}, 0);
+
+  /* demo card slides in */
+  gsap.from('#demo', {x:90, scale:.9, ease:'none', scrollTrigger:{trigger:'#pipeline .grid', start:'top 85%', end:'top 30%', scrub:.6}});
+
+  /* avatars */
+  gsap.utils.toArray('.avatar').forEach(a => {
+    gsap.from(a, {scale:.3, rotate:-120, opacity:0, duration:1.2, ease:'back.out(1.6)', scrollTrigger:{trigger:a, start:'top 88%'}});
+  });
+
+  /* big text bands move against each other */
+  gsap.fromTo('.band-a', {xPercent:-30}, {xPercent:0, ease:'none', scrollTrigger:{trigger:'#band', start:'top bottom', end:'bottom top', scrub:.4}});
+  gsap.fromTo('.band-b', {xPercent:0}, {xPercent:-30, ease:'none', scrollTrigger:{trigger:'#band', start:'top bottom', end:'bottom top', scrub:.4}});
+
+  /* CTA button grows in, grid drifts */
+  gsap.from('#kontakt .btn-main', {scale:.6, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top 70%', end:'center center', scrub:.5}});
+  gsap.to('#kontakt .grid-bg', {yPercent:18, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top bottom', end:'bottom top', scrub:true}});
+
+  ScrollTrigger.sort(); ScrollTrigger.refresh();
+  addEventListener('load', () => ScrollTrigger.refresh());
 
   if (!fine) return;
 
