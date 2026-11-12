@@ -645,7 +645,7 @@
 
   /* manifest: pinned, words light up */
   const mw = splitWords(document.getElementById('manifest-text'), 'w mf-w');
-  const mtl = gsap.timeline({scrollTrigger:{trigger:'#manifest', start:'top top', end:'+=130%', pin:true, scrub:.5}});
+  const mtl = gsap.timeline({scrollTrigger:{trigger:'#manifest', start:'top top', end:'+=130%', pin:true, scrub:.5, refreshPriority:2}});
   mtl.to(mw, {opacity:1, stagger:.08, ease:'none', duration:.3});
   mtl.to('#manifest-bar', {scaleX:1, ease:'none', duration:mtl.duration()}, 0);
 
@@ -670,7 +670,7 @@
   const csSteps = gsap.utils.toArray('.cs-step');
   const lit = () => ({color:'#34f5c5', borderColor:'rgba(52,245,197,.6)', backgroundColor:'rgba(52,245,197,.08)', duration:.3});
   const cs = gsap.timeline({defaults:{ease:'power2.out'}, scrollTrigger: desk
-    ? {trigger:'#case', start:'top top', end:'+=230%', pin:true, scrub:.6}
+    ? {trigger:'#case', start:'top top', end:'+=230%', pin:true, scrub:.6, refreshPriority:1}
     : {trigger:'#case', start:'top 75%', end:'bottom 75%', scrub:.6}});
   cs.to(csSteps[0], lit())
     .from('#cs-doc', {y:70, opacity:0, rotate:-5, duration:.8}, '<')
