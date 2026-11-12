@@ -81,6 +81,19 @@
 
   #progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--mint),var(--volt),var(--ultra));z-index:80}
   .big-word{font-size:clamp(4.5rem,19vw,19rem);line-height:.82;letter-spacing:-.06em;-webkit-text-stroke:1px rgba(255,255,255,.1);color:transparent;user-select:none}
+  .cs-step{border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:.5rem .9rem;color:#7b8399;text-align:center}
+  .cs-paper{border-radius:18px;padding:1.5rem;background:linear-gradient(170deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);overflow:hidden}
+  .cs-line{position:relative;min-height:1.7em;margin-bottom:.3rem;font:13px/1.7 "JetBrains Mono",monospace;color:rgba(255,255,255,.78)}
+  .cs-line .sk{position:absolute;left:0;top:.45em;height:.8em;border-radius:4px;background:rgba(255,255,255,.13);opacity:0}
+  .hl{border-radius:4px;padding:0 3px;font-weight:500}
+  .cs-beam{width:2px;height:44px;margin:0 auto;background:rgba(255,255,255,.1)}
+  .cs-beam i{display:block;width:100%;height:100%;background:linear-gradient(90deg,var(--mint),var(--volt));box-shadow:0 0 16px var(--mint)}
+  @media (min-width:1024px){.cs-beam{width:110px;height:2px}}
+  .cs-f{display:flex;justify-content:space-between;gap:1rem;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14px}
+  .cs-f>span:first-child{color:rgba(255,255,255,.45)}
+  .cs-v{font-family:"JetBrains Mono",monospace;font-size:13px;text-align:right}
+  .cs-c{display:flex;gap:.6rem;align-items:center;font-size:14px;padding:.28rem 0;color:rgba(255,255,255,.8)}
+  .cs-c::before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(52,245,197,.15);color:var(--mint);font-size:12px;flex:none}
   .w{display:inline-block;will-change:transform,opacity}
   .mf-w{opacity:.12}
   .band{font-size:clamp(3.5rem,13vw,12rem);line-height:1;letter-spacing:-.05em;white-space:nowrap}
@@ -269,6 +282,53 @@
         <p class="mt-4 text-xs text-white/35 font-mono">Ukázka s vymyšlenými údaji.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- CASE -->
+<section id="case" class="relative border-t border-white/[.07] overflow-hidden">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 lg:min-h-[100svh] flex flex-col justify-center py-20 lg:pt-20 lg:pb-6">
+    <div class="font-mono text-mint text-sm mb-4">// automatizace v praxi · advokátní kancelář</div>
+    <h2 class="font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(1.9rem,4vw,3.2rem)] max-w-4xl">Dokument dorazí. <span class="grad">Zbytek se stane sám.</span></h2>
+    <div class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-2 font-mono text-[11px] md:text-xs">
+      <div class="cs-step">01 · příjem skenu</div>
+      <div class="cs-step">02 · OCR přečte text</div>
+      <div class="cs-step">03 · vytažení údajů</div>
+      <div class="cs-step">04 · zápis do systému</div>
+    </div>
+    <div class="mt-7 grid lg:grid-cols-[1fr_auto_1fr] gap-5 lg:gap-0 items-center">
+      <div id="cs-doc" class="cs-paper relative mx-auto w-full max-w-md">
+        <div class="scan" id="cs-scan"></div>
+        <div class="flex items-center justify-between mb-4 font-mono text-[11px] text-white/40"><span>sken_0412.pdf</span><span id="cs-ocr" class="text-mint">OCR ✓</span></div>
+        <div class="cs-line"><span class="tx">Okresní soud v Brně</span><i class="sk" style="width:52%"></i></div>
+        <div class="cs-line"><span class="tx">Sp. zn.: <b class="hl">12 C 345/2026</b></span><i class="sk" style="width:64%"></i></div>
+        <div class="cs-line"><span class="tx">Žalobce: <b class="hl">Jan Novák</b>, Brno</span><i class="sk" style="width:78%"></i></div>
+        <div class="cs-line"><span class="tx"><b class="hl">Žaloba na zaplacení</b></span><i class="sk" style="width:58%"></i></div>
+        <div class="cs-line"><span class="tx">částky <b class="hl">184 500 Kč</b> s přísl.</span><i class="sk" style="width:70%"></i></div>
+        <div class="cs-line"><span class="tx">Vyjádření ve lhůtě <b class="hl">15 dnů</b>.</span><i class="sk" style="width:74%"></i></div>
+      </div>
+      <div id="cs-beam" class="cs-beam"><i></i></div>
+      <div class="tilt-wrap w-full max-w-md mx-auto">
+        <div id="cs-panel" class="glass p-6 md:p-7" style="--c:#4d7cff">
+          <div class="flex items-center justify-between mb-3">
+            <div class="font-display font-semibold text-lg">Spisový systém</div>
+            <div class="font-mono text-[11px] px-2.5 py-1 rounded-full border border-volt/50 text-volt">nový spis</div>
+          </div>
+          <div class="cs-f"><span>Typ</span><span class="cs-v">Žaloba na zaplacení</span></div>
+          <div class="cs-f"><span>Spisová značka</span><span class="cs-v">12 C 345/2026</span></div>
+          <div class="cs-f"><span>Protistrana</span><span class="cs-v text-mint">[OSOBA_1]</span></div>
+          <div class="cs-f"><span>Částka</span><span class="cs-v">184 500 Kč</span></div>
+          <div class="cs-f"><span>Lhůta</span><span class="cs-v">15 dnů od doručení</span></div>
+          <div class="mt-4">
+            <div class="cs-c">Spis založen</div>
+            <div class="cs-c">Lhůta zapsána do kalendáře</div>
+            <div class="cs-c">Úkol přidělen advokátovi</div>
+          </div>
+          <div id="cs-done" class="mt-4 font-mono text-xs text-mint">● hotovo · 0 ručních kroků</div>
+        </div>
+      </div>
+    </div>
+    <p class="mt-5 text-xs text-white/35 font-mono">Ilustrační ukázka s vymyšlenými údaji.</p>
   </div>
 </section>
 
@@ -604,6 +664,31 @@
   /* CTA button grows in, grid drifts */
   gsap.from('#kontakt .btn-main', {scale:.6, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top 70%', end:'center center', scrub:.5}});
   gsap.to('#kontakt .grid-bg', {yPercent:18, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top bottom', end:'bottom top', scrub:true}});
+
+  /* case: one document flowing through the automation */
+  const desk = matchMedia('(min-width:1024px)').matches;
+  const csSteps = gsap.utils.toArray('.cs-step');
+  const lit = () => ({color:'#34f5c5', borderColor:'rgba(52,245,197,.6)', backgroundColor:'rgba(52,245,197,.08)', duration:.3});
+  const cs = gsap.timeline({defaults:{ease:'power2.out'}, scrollTrigger: desk
+    ? {trigger:'#case', start:'top top', end:'+=230%', pin:true, scrub:.6}
+    : {trigger:'#case', start:'top 75%', end:'bottom 75%', scrub:.6}});
+  cs.to(csSteps[0], lit())
+    .from('#cs-doc', {y:70, opacity:0, rotate:-5, duration:.8}, '<')
+    .to(csSteps[1], lit())
+    .fromTo('#cs-scan', {top:0, opacity:0}, {top:'100%', opacity:1, duration:1.2, ease:'none'}, '<')
+    .fromTo('#case .sk', {opacity:1}, {opacity:0, stagger:.15, duration:.3}, '<0.1')
+    .from('#case .tx', {opacity:0, stagger:.15, duration:.3}, '<')
+    .to('#cs-scan', {opacity:0, duration:.15})
+    .from('#cs-ocr', {opacity:0, duration:.3}, '<')
+    .to(csSteps[2], lit())
+    .to('#case .hl', {backgroundColor:'rgba(52,245,197,.16)', color:'#34f5c5', stagger:.12, duration:.3}, '<')
+    .from('#cs-beam i', desk ? {scaleX:0, transformOrigin:'0 50%', duration:.6, ease:'none'} : {scaleY:0, transformOrigin:'50% 0', duration:.6, ease:'none'})
+    .from('#cs-panel', {opacity:.25, scale:.94, duration:.5}, '<')
+    .from('#case .cs-v', {opacity:0, x:-18, stagger:.18, duration:.35})
+    .to(csSteps[3], lit())
+    .from('#case .cs-c', {opacity:0, x:-18, stagger:.22, duration:.35}, '<')
+    .from('#cs-done', {opacity:0, scale:.8, duration:.4})
+    .to({}, {duration:.5});
 
   ScrollTrigger.sort(); ScrollTrigger.refresh();
   addEventListener('load', () => ScrollTrigger.refresh());
