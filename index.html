@@ -691,7 +691,20 @@
     .to({}, {duration:.5});
 
   ScrollTrigger.sort(); ScrollTrigger.refresh();
-  addEventListener('load', () => ScrollTrigger.refresh());
+  /* layout settles late (Tailwind CDN builds its CSS asynchronously, web fonts swap in):
+     re-measure every trigger whenever the page height changes, otherwise pins start too early */
+  let lastH = 0, rt;
+  const remeasure = () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      if (Math.abs(document.documentElement.scrollHeight - lastH) < 4) return;
+      ScrollTrigger.refresh();
+      lastH = document.documentElement.scrollHeight;
+    }, 200);
+  };
+  new ResizeObserver(remeasure).observe(document.body);
+  addEventListener('load', remeasure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
 
   if (!fine) return;
 
