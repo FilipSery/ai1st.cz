@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ai1st.cz – AI na prvním místě. Rutina na posledním.</title>
 <meta name="description" content="ai1st.cz – B2B AI automatizace, OCR pipeline na míru a lokální pseudonymizace dat pro advokátní kanceláře a firmy. Filip Šerý & Vojta Pokorný.">
-<meta name="theme-color" content="#05060a">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2305060a'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%2334f5c5'>AI</text></svg>">
+<meta name="theme-color" content="#07080b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2307080b'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%2334f5c5'>AI</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap&subset=latin-ext" rel="stylesheet">
@@ -15,253 +15,200 @@
   tailwind.config = {
     theme: {
       extend: {
-        colors: { ink:'#05060a', panel:'#0b0d14', line:'rgba(255,255,255,.08)', mint:'#34f5c5', volt:'#4d7cff', ultra:'#a66bff' },
+        colors: { ink:'#07080b', panel:'#0d0f14', mint:'#34f5c5' },
         fontFamily: { display:['"Space Grotesk"','system-ui','sans-serif'], sans:['Inter','system-ui','sans-serif'], mono:['"JetBrains Mono"','ui-monospace','monospace'] }
       }
     }
   }
 </script>
 <style>
-  :root{--mint:#34f5c5;--volt:#4d7cff;--ultra:#a66bff}
-  html,body{background:#05060a}
-  body{color:#e9ecf4;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  ::selection{background:var(--mint);color:#05060a}
-  .grad{background:linear-gradient(100deg,var(--mint) 0%,var(--volt) 50%,var(--ultra) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:shift 8s ease-in-out infinite alternate}
-  @keyframes shift{to{background-position:100% 0}}
+  :root{--mint:#34f5c5;--ink:#07080b;--panel:#0d0f14;--line:rgba(255,255,255,.09);--ease-out:cubic-bezier(.23,1,.32,1)}
+  html,body{background:var(--ink)}
+  body{color:#e8eaf0;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--mint);color:var(--ink)}
+  :focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:4px}
   .line{display:block;overflow:hidden;padding-bottom:.08em}
-  .line>span{display:block;will-change:transform}
-  .noise{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-  .grid-bg{background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 30%,transparent 80%)}
-  .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;will-change:transform}
-  #spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(520px circle at var(--sx,50%) var(--sy,40%),rgba(52,245,197,.13),rgba(77,124,255,.06) 40%,transparent 65%)}
+  .line>span{display:block}
 
-  /* glass cards */
-  .tilt-wrap{perspective:1100px}
-  .glass{position:relative;border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);transform-style:preserve-3d;will-change:transform}
-  .glass::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:radial-gradient(380px circle at var(--mx,50%) var(--my,0%),var(--c,var(--mint)),transparent 60%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;pointer-events:none}
-  .glass::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--c,var(--mint)) 16%,transparent),transparent 60%);opacity:0;transition:opacity .4s;pointer-events:none}
-  .glass:hover::before,.glass:hover::after{opacity:1}
-  .pop{transform:translateZ(46px)}
-  .pop-sm{transform:translateZ(24px)}
-  .icon-box{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);box-shadow:0 0 34px -6px var(--c);color:var(--c)}
+  /* type */
+  .eyebrow{font:500 13px "JetBrains Mono",monospace;color:var(--mint);margin-bottom:1.25rem}
+  .h2{font-family:"Space Grotesk",sans-serif;font-weight:700;letter-spacing:-.035em;line-height:1.05;font-size:clamp(2rem,4.6vw,3.75rem)}
+  .dim{color:rgba(255,255,255,.5)}
 
-  /* marquee */
-  .marquee{display:flex;width:max-content;animation:mq 34s linear infinite}
-  @keyframes mq{to{transform:translateX(-50%)}}
+  /* surfaces */
+  .card{border-radius:16px;background:var(--panel);border:1px solid var(--line)}
+  .card-head{display:flex;align-items:center;gap:.75rem}
+  .card-head svg{flex:none;color:var(--mint)}
+  .chip{padding:.45rem .85rem;border-radius:999px;border:1px solid var(--line)}
 
   /* buttons */
-  .btn-main{position:relative;display:inline-flex;align-items:center;gap:.7rem;border-radius:999px;font-weight:600;color:#05060a;background:linear-gradient(100deg,var(--mint),#7dfbe0);box-shadow:0 0 0 1px rgba(52,245,197,.5),0 0 44px -6px rgba(52,245,197,.75);will-change:transform}
-  .btn-main:hover{box-shadow:0 0 0 1px rgba(52,245,197,.8),0 0 70px -4px rgba(52,245,197,.95)}
-  .btn-ghost{display:inline-flex;align-items:center;gap:.6rem;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#e9ecf4;transition:border-color .3s,background .3s}
-  .btn-ghost:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.05)}
+  .btn-main,.btn-ghost{display:inline-flex;align-items:center;gap:.6rem;border-radius:999px;font-weight:600;transition:transform .16s var(--ease-out),background-color .2s ease,border-color .2s ease}
+  .btn-main{color:var(--ink);background:var(--mint)}
+  .btn-main:hover{background:#5ff8d3}
+  .btn-main svg{transition:transform .2s var(--ease-out)}
+  .btn-main:hover svg{transform:translateX(3px)}
+  .btn-ghost{border:1px solid rgba(255,255,255,.16);color:#e8eaf0;font-weight:500}
+  .btn-ghost:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.04)}
+  .btn-main:active,.btn-ghost:active{transform:scale(.97)}
+  .navlink{transition:color .2s ease}
+  .navlink:hover{color:#fff}
 
   /* pipeline */
-  .rail{position:absolute;left:19px;top:8px;bottom:8px;width:2px;background:rgba(255,255,255,.08)}
-  .rail>i{position:absolute;inset:0;background:linear-gradient(var(--mint),var(--volt),var(--ultra));transform-origin:top;transform:scaleY(0);box-shadow:0 0 18px var(--mint)}
-  .node{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#05060a;border:1px solid rgba(255,255,255,.14);font:500 12px "JetBrains Mono",monospace;color:#7b8399;transition:all .5s}
-  .step.on .node{border-color:var(--mint);color:var(--mint);box-shadow:0 0 26px -2px var(--mint)}
-  .step{opacity:.35;transition:opacity .5s}
+  .rail{position:absolute;left:19px;top:8px;bottom:8px;width:1px;background:var(--line)}
+  .rail>i{position:absolute;inset:0;background:var(--mint);transform-origin:top;transform:scaleY(0)}
+  .node{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--ink);border:1px solid rgba(255,255,255,.14);font:500 12px "JetBrains Mono",monospace;color:#7b8399;transition:border-color .25s ease,color .25s ease}
+  .step{opacity:.4;transition:opacity .25s ease}
   .step.on{opacity:1}
-  .tok{border-radius:6px;padding:1px 6px;margin:0 1px;background:rgba(255,90,120,.12);color:#ff8ea3;border:1px solid rgba(255,90,120,.3);transition:background .4s,color .4s,border-color .4s;white-space:nowrap}
-  .tok.safe{background:rgba(52,245,197,.1);color:var(--mint);border-color:rgba(52,245,197,.35)}
-  .scan{position:absolute;left:0;right:0;height:2px;top:0;background:linear-gradient(90deg,transparent,var(--mint),transparent);box-shadow:0 0 22px 3px rgba(52,245,197,.6);opacity:0}
+  .step.on .node{border-color:var(--mint);color:var(--mint)}
+  .tok{border-radius:5px;padding:3px 8px;margin:0 1px;background:rgba(255,90,120,.1);color:#ff8ea3;border:1px solid rgba(255,90,120,.28);transition:background-color .25s ease,color .25s ease,border-color .25s ease;white-space:nowrap}
+  .tok.safe{background:rgba(52,245,197,.08);color:var(--mint);border-color:rgba(52,245,197,.3)}
+  .scan{position:absolute;left:0;right:0;height:1px;top:0;background:var(--mint);opacity:0}
 
-  /* avatars */
-  .avatar{position:relative;width:132px;height:132px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.14),rgba(255,255,255,.02));font:700 40px "Space Grotesk",sans-serif;letter-spacing:-.04em}
-  .avatar::before{content:"";position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(from 0deg,var(--c),transparent 35%,var(--c2) 60%,transparent 85%,var(--c));animation:spin 6s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px))}
-  .avatar::after{content:"";position:absolute;inset:-26px;border-radius:50%;background:radial-gradient(circle,var(--c),transparent 65%);opacity:.22;z-index:-1}
-  @keyframes spin{to{transform:rotate(360deg)}}
-
-  /* cursor */
-  #cur,#cur-ring{position:fixed;top:0;left:0;border-radius:50%;pointer-events:none;z-index:70;display:none}
-  #cur{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--mint)}
-  #cur-ring{width:38px;height:38px;margin:-19px 0 0 -19px;border:1px solid rgba(52,245,197,.55);transition:width .25s,height .25s,margin .25s,background .25s,border-color .25s}
-  #cur-ring.big{width:74px;height:74px;margin:-37px 0 0 -37px;background:rgba(52,245,197,.08);border-color:rgba(52,245,197,.9)}
-  @media (hover:hover) and (pointer:fine){#cur,#cur-ring{display:block}}
-
-  #progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--mint),var(--volt),var(--ultra));z-index:80}
-  .big-word{font-size:clamp(4.5rem,19vw,19rem);line-height:.82;letter-spacing:-.06em;-webkit-text-stroke:1px rgba(255,255,255,.1);color:transparent;user-select:none}
-  .cs-step{border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:.5rem .9rem;color:#7b8399;text-align:center}
-  .cs-paper{border-radius:18px;padding:1.5rem;background:linear-gradient(170deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);overflow:hidden}
+  /* case */
+  .cs-step{border:1px solid var(--line);border-radius:999px;padding:.6rem 1rem;color:#7b8399;text-align:center}
   .cs-line{position:relative;min-height:1.7em;margin-bottom:.3rem;font:13px/1.7 "JetBrains Mono",monospace;color:rgba(255,255,255,.78)}
-  .cs-line .sk{position:absolute;left:0;top:.45em;height:.8em;border-radius:4px;background:rgba(255,255,255,.13);opacity:0}
-  .hl{border-radius:4px;padding:0 3px;font-weight:500}
-  .cs-beam{width:2px;height:44px;margin:0 auto;background:rgba(255,255,255,.1)}
-  .cs-beam i{display:block;width:100%;height:100%;background:linear-gradient(90deg,var(--mint),var(--volt));box-shadow:0 0 16px var(--mint)}
-  @media (min-width:1024px){.cs-beam{width:110px;height:2px}}
+  .cs-line .sk{position:absolute;left:0;top:.45em;height:.8em;border-radius:4px;background:rgba(255,255,255,.12);opacity:0}
+  .hl{border-radius:4px;padding:2px 6px;font-weight:500}
+  .cs-beam{width:1px;height:44px;margin:0 auto;background:var(--line)}
+  .cs-beam i{display:block;width:100%;height:100%;background:var(--mint)}
+  @media (min-width:1024px){.cs-beam{width:110px;height:1px}}
   .cs-f{display:flex;justify-content:space-between;gap:1rem;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14px}
-  .cs-f>span:first-child{color:rgba(255,255,255,.45)}
+  .cs-f>span:first-child{color:rgba(255,255,255,.55)}
   .cs-v{font-family:"JetBrains Mono",monospace;font-size:13px;text-align:right}
   .cs-c{display:flex;gap:.6rem;align-items:center;font-size:14px;padding:.28rem 0;color:rgba(255,255,255,.8)}
-  .cs-c::before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(52,245,197,.15);color:var(--mint);font-size:12px;flex:none}
-  .w{display:inline-block;will-change:transform,opacity}
-  .mf-w{opacity:.12}
-  .band{font-size:clamp(3.5rem,13vw,12rem);line-height:1;letter-spacing:-.05em;white-space:nowrap}
-  .band .o{-webkit-text-stroke:1px rgba(255,255,255,.22);color:transparent}
+  .cs-c::before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(52,245,197,.12);color:var(--mint);font-size:12px;flex:none}
+
+  .avatar{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);font:600 22px "Space Grotesk",sans-serif;letter-spacing:-.02em;color:rgba(255,255,255,.8)}
+  .mf-w{opacity:.14}
+  .band{font-size:clamp(2.5rem,8vw,7rem);line-height:1.05;letter-spacing:-.04em;white-space:nowrap}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body class="font-sans">
-<div id="progress"></div>
-<div class="noise"></div>
-<div id="cur"></div><div id="cur-ring"></div>
 
 <!-- NAV -->
-<header id="nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-500">
-  <div class="max-w-7xl mx-auto px-5 md:px-8 h-[72px] flex items-center justify-between">
-    <a href="#top" class="font-display font-bold text-2xl tracking-tight" data-hover>ai<span class="text-mint">1st</span><span class="text-white/30">.cz</span></a>
+<header id="nav" class="fixed top-0 inset-x-0 z-50 border-b border-transparent transition-colors duration-200">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+    <a href="#top" class="font-display font-bold text-xl tracking-tight">ai<span class="text-mint">1st</span><span class="text-white/50">.cz</span></a>
     <nav class="hidden md:flex items-center gap-9 text-sm text-white/60">
-      <a class="hover:text-white transition" href="#sluzby" data-hover>Co děláme</a>
-      <a class="hover:text-white transition" href="#pipeline" data-hover>Jak to běží</a>
-      <a class="hover:text-white transition" href="#architekti" data-hover>Architekti</a>
+      <a class="navlink" href="#sluzby">Co děláme</a>
+      <a class="navlink" href="#pipeline">Jak to běží</a>
+      <a class="navlink" href="#architekti">Architekti</a>
     </nav>
-    <a href="#kontakt" class="btn-ghost px-5 py-2.5 text-sm font-medium" data-hover><span class="w-1.5 h-1.5 rounded-full bg-mint shadow-[0_0_10px_#34f5c5]"></span>Ozvěte se</a>
+    <a href="#kontakt" class="btn-ghost px-5 py-2 text-sm">Ozvěte se</a>
   </div>
 </header>
 
 <main id="top">
 <!-- HERO -->
 <section id="hero" class="relative min-h-[100svh] flex items-center overflow-hidden">
-  <div class="absolute inset-0 grid-bg"></div>
-  <div class="orb w-[520px] h-[520px] bg-mint -top-40 -left-40" data-speed="0.25"></div>
-  <div class="orb w-[560px] h-[560px] bg-ultra top-1/3 -right-52" data-speed="0.45"></div>
-  <div class="orb w-[420px] h-[420px] bg-volt bottom-[-180px] left-1/3" data-speed="0.15"></div>
-  <canvas id="fx" class="absolute inset-0 w-full h-full"></canvas>
-  <div id="spot"></div>
-  <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-ink to-transparent"></div>
+  <canvas id="fx" class="absolute inset-0 w-full h-full" aria-hidden="true"></canvas>
+  <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent"></div>
 
-  <div id="hero-inner" class="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-28 pb-24 w-full">
-    <div class="hero-fade inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[.04] backdrop-blur px-4 py-2 text-xs md:text-sm text-white/70 font-mono mb-8">
-      <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-mint opacity-70"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-mint"></span></span>
-      AI automatizace pro firmy a advokátní kanceláře
-    </div>
-    <h1 class="font-display font-bold tracking-[-0.045em] leading-[.95] text-[clamp(2.7rem,8.6vw,7.6rem)]">
-      <span class="line"><span>AI na prvním</span></span>
-      <span class="line"><span>místě. <em class="not-italic grad">Rutina</em></span></span>
-      <span class="line"><span><em class="not-italic grad">na posledním.</em></span></span>
+  <div class="relative z-10 max-w-6xl mx-auto px-5 md:px-8 pt-28 pb-20 w-full">
+    <div class="hero-fade eyebrow">AI automatizace pro firmy a advokátní kanceláře</div>
+    <h1 class="font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(2.6rem,7vw,6rem)]">
+      <span class="line"><span>AI na prvním místě.</span></span>
+      <span class="line"><span class="text-mint">Rutina na posledním.</span></span>
     </h1>
-    <p class="hero-fade mt-8 max-w-2xl text-lg md:text-xl text-white/60 leading-relaxed">
+    <p class="hero-fade mt-7 max-w-xl text-lg text-white/60 leading-relaxed">
       Stavíme automatizace, které za vás odpracují tu nudnou část firmy. Dokumenty, data, procesy. Tvrdá technika, žádné prezentace o budoucnosti.
     </p>
-    <div class="hero-fade mt-11 flex flex-wrap items-center gap-4">
-      <a href="#kontakt" class="btn-main magnetic px-8 py-4 text-base md:text-lg" data-hover>
+    <div class="hero-fade mt-9 flex flex-wrap items-center gap-3">
+      <a href="#kontakt" class="btn-main px-7 py-3.5 text-base">
         <span>Nastartovat transformaci</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <a href="#sluzby" class="btn-ghost px-7 py-4 text-base md:text-lg" data-hover>Co umíme</a>
+      <a href="#sluzby" class="btn-ghost px-7 py-3.5 text-base">Co umíme</a>
     </div>
-    <div class="hero-fade mt-16 grid grid-cols-1 sm:grid-cols-3 gap-px rounded-2xl overflow-hidden border border-white/[.08] bg-white/[.08] max-w-3xl">
-      <div class="bg-ink/80 backdrop-blur px-5 py-4"><div class="font-mono text-mint text-xs mb-1">// lokálně</div><div class="text-sm text-white/70">Citlivá data neopouští vaši síť</div></div>
-      <div class="bg-ink/80 backdrop-blur px-5 py-4"><div class="font-mono text-volt text-xs mb-1">// na míru</div><div class="text-sm text-white/70">Žádné krabicové řešení</div></div>
-      <div class="bg-ink/80 backdrop-blur px-5 py-4"><div class="font-mono text-ultra text-xs mb-1">// měřitelně</div><div class="text-sm text-white/70">Ušetřené hodiny, ne sliby</div></div>
-    </div>
+    <dl class="hero-fade mt-16 grid grid-cols-1 sm:grid-cols-3 gap-x-10 gap-y-5 max-w-3xl border-t border-white/10 pt-6">
+      <div><dt class="font-display font-semibold text-white">Lokálně</dt><dd class="mt-1 text-sm text-white/55">Citlivá data neopouští vaši síť</dd></div>
+      <div><dt class="font-display font-semibold text-white">Na míru</dt><dd class="mt-1 text-sm text-white/55">Žádné krabicové řešení</dd></div>
+      <div><dt class="font-display font-semibold text-white">Měřitelně</dt><dd class="mt-1 text-sm text-white/55">Ušetřené hodiny, ne sliby</dd></div>
+    </dl>
   </div>
-  <a href="#sluzby" class="hero-fade absolute bottom-7 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-[11px] font-mono uppercase tracking-[.25em] text-white/40" data-hover>
-    scroll<span class="block w-px h-10 bg-gradient-to-b from-mint to-transparent animate-pulse"></span>
-  </a>
 </section>
 
-<!-- MARQUEE -->
-<div class="relative border-y border-white/[.07] py-5 overflow-hidden bg-white/[.015]">
-  <div class="marquee font-display text-xl md:text-2xl font-medium text-white/30 whitespace-nowrap">
-    <div class="flex gap-12 pr-12"><span>Python</span><span class="text-mint">✦</span><span>C++</span><span class="text-volt">✦</span><span>Machine learning</span><span class="text-ultra">✦</span><span>OCR</span><span class="text-mint">✦</span><span>LLM</span><span class="text-volt">✦</span><span>Pseudonymizace</span><span class="text-ultra">✦</span><span>Datové pipeline</span><span class="text-mint">✦</span><span>API integrace</span><span class="text-volt">✦</span><span>On-premise</span><span class="text-ultra">✦</span></div>
-    <div class="flex gap-12 pr-12" aria-hidden="true"><span>Python</span><span class="text-mint">✦</span><span>C++</span><span class="text-volt">✦</span><span>Machine learning</span><span class="text-ultra">✦</span><span>OCR</span><span class="text-mint">✦</span><span>LLM</span><span class="text-volt">✦</span><span>Pseudonymizace</span><span class="text-ultra">✦</span><span>Datové pipeline</span><span class="text-mint">✦</span><span>API integrace</span><span class="text-volt">✦</span><span>On-premise</span><span class="text-ultra">✦</span></div>
-  </div>
+<!-- TECH -->
+<div class="border-y border-white/[.08]">
+  <ul class="max-w-6xl mx-auto px-5 md:px-8 py-5 flex flex-wrap gap-x-8 gap-y-2 font-mono text-sm text-white/55">
+    <li>Python</li><li>C++</li><li>Machine learning</li><li>OCR</li><li>LLM</li><li>Pseudonymizace</li><li>Datové pipeline</li><li>API integrace</li><li>On-premise</li>
+  </ul>
 </div>
 
 <!-- SERVICES -->
-<section id="sluzby" class="relative py-28 md:py-40">
-  <div class="max-w-7xl mx-auto px-5 md:px-8">
-    <div class="reveal font-mono text-mint text-sm mb-5">01 / Co děláme</div>
-    <h2 class="reveal font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(2.2rem,5.6vw,4.8rem)] max-w-4xl">Tři věci. <span class="text-white/35">Děláme je pořádně.</span></h2>
-    <p class="reveal mt-6 max-w-2xl text-lg text-white/55">Nejsme agentura na všechno. Řešíme místa, kde firmy pálí nejvíc času a kde na datech nejvíc záleží.</p>
+<section id="sluzby" class="py-24 md:py-32">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="eyebrow">01 / Co děláme</div>
+    <h2 class="h2 max-w-3xl">Tři věci. <span class="dim">Děláme je pořádně.</span></h2>
+    <p class="mt-5 max-w-2xl text-lg text-white/55">Nejsme agentura na všechno. Řešíme místa, kde firmy pálí nejvíc času a kde na datech nejvíc záleží.</p>
 
-    <div class="mt-16 grid lg:grid-cols-3 gap-6">
-      <div class="tilt-wrap card-in">
-        <article class="glass tilt h-full p-8 md:p-9" style="--c:#34f5c5" data-hover>
-          <div class="icon-box pop"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></div>
-          <div class="pop-sm">
-            <div class="font-mono text-xs text-white/40 mt-8 mb-3">SLUŽBA_01</div>
-            <h3 class="font-display font-bold text-2xl md:text-[1.7rem] tracking-tight">B2B AI automatizace</h3>
-            <p class="mt-4 text-white/60 leading-relaxed">Procesy, které vašim lidem žerou hodiny, přestavíme na pipeline, která běží sama. E-maily, podklady, reporty, napojení na systémy, které už používáte.</p>
-            <ul class="mt-7 space-y-2.5 text-sm text-white/70">
-              <li class="flex gap-3"><span class="text-mint">→</span>Návrh a nasazení od A do Z</li>
-              <li class="flex gap-3"><span class="text-mint">→</span>Integrace přes API</li>
-              <li class="flex gap-3"><span class="text-mint">→</span>Člověk schvaluje, stroj dře</li>
-            </ul>
-          </div>
-        </article>
-      </div>
-      <div class="tilt-wrap card-in">
-        <article class="glass tilt h-full p-8 md:p-9" style="--c:#4d7cff" data-hover>
-          <div class="icon-box pop"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2M3 12h18M8 8h8M8 16h5"/></svg></div>
-          <div class="pop-sm">
-            <div class="font-mono text-xs text-white/40 mt-8 mb-3">SLUŽBA_02</div>
-            <h3 class="font-display font-bold text-2xl md:text-[1.7rem] tracking-tight">OCR pipeline na míru</h3>
-            <p class="mt-4 text-white/60 leading-relaxed">Skeny, smlouvy, faktury, celé spisy. Z hromady PDF uděláme čistá strukturovaná data, se kterými se dá dál pracovat, hledat a počítat.</p>
-            <ul class="mt-7 space-y-2.5 text-sm text-white/70">
-              <li class="flex gap-3"><span class="text-volt">→</span>Skeny i mizerná kvalita</li>
-              <li class="flex gap-3"><span class="text-volt">→</span>Extrakce přesně vašich polí</li>
-              <li class="flex gap-3"><span class="text-volt">→</span>Hromadné zpracování</li>
-            </ul>
-          </div>
-        </article>
-      </div>
-      <div class="tilt-wrap card-in">
-        <article class="glass tilt h-full p-8 md:p-9" style="--c:#a66bff" data-hover>
-          <div class="icon-box pop"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.2 7.9 8 9 4.800-1.100 8-4.500 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <div class="pop-sm">
-            <div class="font-mono text-xs text-white/40 mt-8 mb-3">SLUŽBA_03</div>
-            <h3 class="font-display font-bold text-2xl md:text-[1.7rem] tracking-tight">Lokální pseudonymizace dat</h3>
-            <p class="mt-4 text-white/60 leading-relaxed">Jména, rodná čísla, adresy a další citlivé údaje nahradíme dřív, než se k nim dostane jakýkoli model. Běží u vás. Stavěné pro advokátní kanceláře a korporace.</p>
-            <ul class="mt-7 space-y-2.5 text-sm text-white/70">
-              <li class="flex gap-3"><span class="text-ultra">→</span>Zpracování ve vaší síti</li>
-              <li class="flex gap-3"><span class="text-ultra">→</span>Vratné mapování údajů</li>
-              <li class="flex gap-3"><span class="text-ultra">→</span>AI bez rizika pro klienty</li>
-            </ul>
-          </div>
-        </article>
-      </div>
+    <div class="mt-14 grid lg:grid-cols-3 gap-5">
+      <article class="card p-7 md:p-8">
+        <div class="card-head"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg><h3 class="font-display font-bold text-2xl tracking-tight">B2B AI automatizace</h3></div>
+        <p class="mt-4 text-white/60 leading-relaxed">Procesy, které vašim lidem žerou hodiny, přestavíme na pipeline, která běží sama. E-maily, podklady, reporty, napojení na systémy, které už používáte.</p>
+        <ul class="mt-6 pt-6 border-t border-white/[.08] space-y-2 text-sm text-white/70">
+          <li>Návrh a nasazení od A do Z</li>
+          <li>Integrace přes API</li>
+          <li>Člověk schvaluje, stroj dře</li>
+        </ul>
+      </article>
+      <article class="card p-7 md:p-8">
+        <div class="card-head"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2M3 12h18M8 8h8M8 16h5"/></svg><h3 class="font-display font-bold text-2xl tracking-tight">OCR pipeline na míru</h3></div>
+        <p class="mt-4 text-white/60 leading-relaxed">Skeny, smlouvy, faktury, celé spisy. Z hromady PDF uděláme čistá strukturovaná data, se kterými se dá dál pracovat, hledat a počítat.</p>
+        <ul class="mt-6 pt-6 border-t border-white/[.08] space-y-2 text-sm text-white/70">
+          <li>Skeny i mizerná kvalita</li>
+          <li>Extrakce přesně vašich polí</li>
+          <li>Hromadné zpracování</li>
+        </ul>
+      </article>
+      <article class="card p-7 md:p-8">
+        <div class="card-head"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.500 3.200 7.900 8 9 4.800-1.100 8-4.500 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg><h3 class="font-display font-bold text-2xl tracking-tight">Lokální pseudonymizace dat</h3></div>
+        <p class="mt-4 text-white/60 leading-relaxed">Jména, rodná čísla, adresy a další citlivé údaje nahradíme dřív, než se k nim dostane jakýkoli model. Běží u vás. Stavěné pro advokátní kanceláře a korporace.</p>
+        <ul class="mt-6 pt-6 border-t border-white/[.08] space-y-2 text-sm text-white/70">
+          <li>Zpracování ve vaší síti</li>
+          <li>Vratné mapování údajů</li>
+          <li>AI bez rizika pro klienty</li>
+        </ul>
+      </article>
     </div>
   </div>
 </section>
 
 <!-- MANIFEST -->
-<section id="manifest" class="relative border-t border-white/[.07]">
-  <div class="max-w-6xl mx-auto px-5 md:px-8 min-h-[100svh] flex flex-col justify-center py-24">
-    <div class="font-mono text-ultra text-sm mb-8">// proč to děláme</div>
-    <p id="manifest-text" class="font-display font-bold tracking-[-0.035em] leading-[1.08] text-[clamp(1.9rem,5.2vw,4.6rem)]">Většina firem AI jen zkouší. My ji zapojíme do provozu. Tak, aby ráno běžela sama a nikdo už nevzpomínal, že tu práci dřív dělal člověk.</p>
-    <div class="mt-12 h-px w-full bg-white/10 overflow-hidden"><i id="manifest-bar" class="block h-full w-full bg-gradient-to-r from-mint via-volt to-ultra" style="transform:scaleX(0);transform-origin:left"></i></div>
+<section id="manifest" class="border-t border-white/[.08]">
+  <div class="max-w-5xl mx-auto px-5 md:px-8 min-h-[100svh] flex flex-col justify-center py-24">
+    <div class="eyebrow">Proč to děláme</div>
+    <p id="manifest-text" class="font-display font-bold tracking-[-0.03em] leading-[1.1] text-[clamp(1.8rem,4.6vw,4rem)]">Většina firem AI jen zkouší. My ji zapojíme do provozu. Tak, aby ráno běžela sama a nikdo už nevzpomínal, že tu práci dřív dělal člověk.</p>
+    <div class="mt-12 h-px w-full bg-white/10 overflow-hidden"><i id="manifest-bar" class="block h-full w-full bg-mint" style="transform:scaleX(0);transform-origin:left"></i></div>
   </div>
 </section>
 
 <!-- PIPELINE -->
-<section id="pipeline" class="relative py-28 md:py-40 border-t border-white/[.07] overflow-hidden">
-  <div class="orb w-[500px] h-[500px] bg-volt -left-60 top-40 opacity-20"></div>
-  <div class="max-w-7xl mx-auto px-5 md:px-8 relative">
-    <div class="reveal font-mono text-volt text-sm mb-5">02 / Jak to běží</div>
-    <h2 class="reveal font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(2.2rem,5.6vw,4.8rem)] max-w-4xl">Od skenu k výsledku. <span class="grad">Bez lidských rukou.</span></h2>
+<section id="pipeline" class="py-24 md:py-32 border-t border-white/[.08]">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="eyebrow">02 / Jak to běží</div>
+    <h2 class="h2 max-w-3xl">Od skenu k výsledku. <span class="dim">Bez lidských rukou.</span></h2>
 
-    <div class="mt-16 grid lg:grid-cols-2 gap-14 lg:gap-20 items-start">
-      <div id="steps" class="relative pl-0">
+    <div class="mt-14 grid lg:grid-cols-2 gap-14 lg:gap-20 items-start">
+      <div id="steps" class="relative">
         <div class="rail"><i id="rail-fill"></i></div>
-        <div class="space-y-12">
-          <div class="step relative flex gap-6"><div class="node shrink-0">01</div><div><h3 class="font-display font-semibold text-xl md:text-2xl">Vstup</h3><p class="mt-2 text-white/55 leading-relaxed">Skeny, PDF, e-maily, exporty. Bereme data tak, jak je máte, ne jak by je chtěla příručka.</p></div></div>
-          <div class="step relative flex gap-6"><div class="node shrink-0">02</div><div><h3 class="font-display font-semibold text-xl md:text-2xl">OCR a extrakce</h3><p class="mt-2 text-white/55 leading-relaxed">Text, tabulky a klíčová pole vytáhneme do struktury. I z dokumentů, které prošly třemi kopírkami.</p></div></div>
-          <div class="step relative flex gap-6"><div class="node shrink-0">03</div><div><h3 class="font-display font-semibold text-xl md:text-2xl">Pseudonymizace</h3><p class="mt-2 text-white/55 leading-relaxed">Osobní a citlivé údaje se nahradí zástupnými značkami. Lokálně, na vašem železe.</p></div></div>
-          <div class="step relative flex gap-6"><div class="node shrink-0">04</div><div><h3 class="font-display font-semibold text-xl md:text-2xl">AI zpracování</h3><p class="mt-2 text-white/55 leading-relaxed">Shrnutí, třídění, kontrola, generování podkladů. Model pracuje jen s tím, co vidět smí.</p></div></div>
-          <div class="step relative flex gap-6"><div class="node shrink-0">05</div><div><h3 class="font-display font-semibold text-xl md:text-2xl">Výstup</h3><p class="mt-2 text-white/55 leading-relaxed">Údaje se vrátí na místo a výsledek přistane tam, kde ho potřebujete. Ve vašem systému, ne v dalším nástroji.</p></div></div>
+        <div class="space-y-10">
+          <div class="step relative flex gap-6"><div class="node shrink-0">01</div><div><h3 class="font-display font-semibold text-xl">Vstup</h3><p class="mt-2 text-white/55 leading-relaxed">Skeny, PDF, e-maily, exporty. Bereme data tak, jak je máte, ne jak by je chtěla příručka.</p></div></div>
+          <div class="step relative flex gap-6"><div class="node shrink-0">02</div><div><h3 class="font-display font-semibold text-xl">OCR a extrakce</h3><p class="mt-2 text-white/55 leading-relaxed">Text, tabulky a klíčová pole vytáhneme do struktury. I z dokumentů, které prošly třemi kopírkami.</p></div></div>
+          <div class="step relative flex gap-6"><div class="node shrink-0">03</div><div><h3 class="font-display font-semibold text-xl">Pseudonymizace</h3><p class="mt-2 text-white/55 leading-relaxed">Osobní a citlivé údaje se nahradí zástupnými značkami. Lokálně, na vašem železe.</p></div></div>
+          <div class="step relative flex gap-6"><div class="node shrink-0">04</div><div><h3 class="font-display font-semibold text-xl">AI zpracování</h3><p class="mt-2 text-white/55 leading-relaxed">Shrnutí, třídění, kontrola, generování podkladů. Model pracuje jen s tím, co vidět smí.</p></div></div>
+          <div class="step relative flex gap-6"><div class="node shrink-0">05</div><div><h3 class="font-display font-semibold text-xl">Výstup</h3><p class="mt-2 text-white/55 leading-relaxed">Údaje se vrátí na místo a výsledek přistane tam, kde ho potřebujete. Ve vašem systému, ne v dalším nástroji.</p></div></div>
         </div>
       </div>
 
-      <div class="lg:sticky lg:top-28 tilt-wrap reveal">
-        <div id="demo" class="glass tilt p-0 overflow-hidden" style="--c:#34f5c5">
-          <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/[.08] bg-black/30">
-            <div class="flex gap-2"><i class="w-3 h-3 rounded-full bg-white/15"></i><i class="w-3 h-3 rounded-full bg-white/15"></i><i class="w-3 h-3 rounded-full bg-white/15"></i></div>
-            <div class="font-mono text-xs text-white/40">pseudonymizer.py</div>
-            <div id="demo-state" class="font-mono text-[11px] px-2.5 py-1 rounded-full border border-[#ff5a78]/40 text-[#ff8ea3]">ORIGINÁL</div>
+      <div class="lg:sticky lg:top-24">
+        <div id="demo" class="card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3 border-b border-white/[.08]">
+            <div class="font-mono text-xs text-white/55">pseudonymizer.py</div>
+            <div id="demo-state" class="font-mono text-[11px] px-3 py-1.5 rounded-full border border-[#ff5a78]/40 text-[#ff8ea3]">ORIGINÁL</div>
           </div>
-          <div class="relative p-6 md:p-8">
+          <div class="relative p-6 md:p-7">
             <div class="scan" id="scan"></div>
             <p class="font-mono text-[13px] md:text-sm leading-[2.1] text-white/75">
               Smlouva o dílo uzavřená mezi:
@@ -273,23 +220,23 @@
               <span class="tok" data-t="[EMAIL_1]">jan.novak@example.cz</span>, tel.
               <span class="tok" data-t="[TEL_1]">+420 600 000 000</span>.
             </p>
-            <div class="mt-7 flex items-center justify-between gap-4 flex-wrap">
-              <div class="font-mono text-xs text-white/40"><span class="text-mint">●</span> běží lokálně · 0 bajtů ven</div>
-              <button id="demo-btn" class="btn-ghost px-4 py-2 text-xs font-mono" data-hover>↻ přehrát znovu</button>
+            <div class="mt-6 flex items-center justify-between gap-4 flex-wrap">
+              <div class="font-mono text-xs text-white/55">běží lokálně · 0 bajtů ven</div>
+              <button id="demo-btn" class="btn-ghost px-4 py-2 text-xs font-mono">↻ přehrát znovu</button>
             </div>
           </div>
         </div>
-        <p class="mt-4 text-xs text-white/35 font-mono">Ukázka s vymyšlenými údaji.</p>
+        <p class="mt-4 text-xs text-white/55 font-mono">Ukázka s vymyšlenými údaji.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- CASE -->
-<section id="case" class="relative border-t border-white/[.07] overflow-hidden">
-  <div class="max-w-7xl mx-auto px-5 md:px-8 lg:min-h-[100svh] flex flex-col justify-center py-20 lg:pt-20 lg:pb-6">
-    <div class="font-mono text-mint text-sm mb-4">// automatizace v praxi · advokátní kancelář</div>
-    <h2 class="font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(1.9rem,4vw,3.2rem)] max-w-4xl">Dokument dorazí. <span class="grad">Zbytek se stane sám.</span></h2>
+<section id="case" class="border-t border-white/[.08] overflow-hidden">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 lg:min-h-[100svh] flex flex-col justify-center py-20 lg:pt-20 lg:pb-6">
+    <div class="eyebrow">Automatizace v praxi · advokátní kancelář</div>
+    <h2 class="h2 max-w-3xl" style="font-size:clamp(1.9rem,4vw,3.2rem)">Dokument dorazí. <span class="dim">Zbytek se stane sám.</span></h2>
     <div class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-2 font-mono text-[11px] md:text-xs">
       <div class="cs-step">01 · příjem skenu</div>
       <div class="cs-step">02 · OCR přečte text</div>
@@ -297,9 +244,9 @@
       <div class="cs-step">04 · zápis do systému</div>
     </div>
     <div class="mt-7 grid lg:grid-cols-[1fr_auto_1fr] gap-5 lg:gap-0 items-center">
-      <div id="cs-doc" class="cs-paper relative mx-auto w-full max-w-md">
+      <div id="cs-doc" class="card relative mx-auto w-full max-w-md p-6 overflow-hidden">
         <div class="scan" id="cs-scan"></div>
-        <div class="flex items-center justify-between mb-4 font-mono text-[11px] text-white/40"><span>sken_0412.pdf</span><span id="cs-ocr" class="text-mint">OCR ✓</span></div>
+        <div class="flex items-center justify-between mb-4 font-mono text-[11px] text-white/55"><span>sken_0412.pdf</span><span id="cs-ocr" class="text-mint">OCR ✓</span></div>
         <div class="cs-line"><span class="tx">Okresní soud v Brně</span><i class="sk" style="width:52%"></i></div>
         <div class="cs-line"><span class="tx">Sp. zn.: <b class="hl">12 C 345/2026</b></span><i class="sk" style="width:64%"></i></div>
         <div class="cs-line"><span class="tx">Žalobce: <b class="hl">Jan Novák</b>, Brno</span><i class="sk" style="width:78%"></i></div>
@@ -308,116 +255,102 @@
         <div class="cs-line"><span class="tx">Vyjádření ve lhůtě <b class="hl">15 dnů</b>.</span><i class="sk" style="width:74%"></i></div>
       </div>
       <div id="cs-beam" class="cs-beam"><i></i></div>
-      <div class="tilt-wrap w-full max-w-md mx-auto">
-        <div id="cs-panel" class="glass p-6 md:p-7" style="--c:#4d7cff">
-          <div class="flex items-center justify-between mb-3">
-            <div class="font-display font-semibold text-lg">Spisový systém</div>
-            <div class="font-mono text-[11px] px-2.5 py-1 rounded-full border border-volt/50 text-volt">nový spis</div>
-          </div>
-          <div class="cs-f"><span>Typ</span><span class="cs-v">Žaloba na zaplacení</span></div>
-          <div class="cs-f"><span>Spisová značka</span><span class="cs-v">12 C 345/2026</span></div>
-          <div class="cs-f"><span>Protistrana</span><span class="cs-v text-mint">[OSOBA_1]</span></div>
-          <div class="cs-f"><span>Částka</span><span class="cs-v">184 500 Kč</span></div>
-          <div class="cs-f"><span>Lhůta</span><span class="cs-v">15 dnů od doručení</span></div>
-          <div class="mt-4">
-            <div class="cs-c">Spis založen</div>
-            <div class="cs-c">Lhůta zapsána do kalendáře</div>
-            <div class="cs-c">Úkol přidělen advokátovi</div>
-          </div>
-          <div id="cs-done" class="mt-4 font-mono text-xs text-mint">● hotovo · 0 ručních kroků</div>
+      <div id="cs-panel" class="card w-full max-w-md mx-auto p-6 md:p-7">
+        <div class="flex items-center justify-between mb-3">
+          <div class="font-display font-semibold text-lg">Spisový systém</div>
+          <div class="font-mono text-[11px] px-3 py-1.5 rounded-full border border-white/15 text-white/60">nový spis</div>
         </div>
+        <div class="cs-f"><span>Typ</span><span class="cs-v">Žaloba na zaplacení</span></div>
+        <div class="cs-f"><span>Spisová značka</span><span class="cs-v">12 C 345/2026</span></div>
+        <div class="cs-f"><span>Protistrana</span><span class="cs-v text-mint">[OSOBA_1]</span></div>
+        <div class="cs-f"><span>Částka</span><span class="cs-v">184 500 Kč</span></div>
+        <div class="cs-f"><span>Lhůta</span><span class="cs-v">15 dnů od doručení</span></div>
+        <div class="mt-4">
+          <div class="cs-c">Spis založen</div>
+          <div class="cs-c">Lhůta zapsána do kalendáře</div>
+          <div class="cs-c">Úkol přidělen advokátovi</div>
+        </div>
+        <div id="cs-done" class="mt-4 font-mono text-xs text-mint">hotovo · 0 ručních kroků</div>
       </div>
     </div>
-    <p class="mt-5 text-xs text-white/35 font-mono">Ilustrační ukázka s vymyšlenými údaji.</p>
+    <p class="mt-5 text-xs text-white/55 font-mono">Ilustrační ukázka s vymyšlenými údaji.</p>
   </div>
 </section>
 
 <!-- ARCHITECTS -->
-<section id="architekti" class="relative py-28 md:py-40 border-t border-white/[.07] overflow-hidden">
-  <div class="big-word font-display font-bold absolute -top-4 md:-top-10 left-0 right-0 text-center whitespace-nowrap" id="bigword">ARCHITEKTI</div>
-  <div class="max-w-7xl mx-auto px-5 md:px-8 relative pt-16 md:pt-28">
-    <div class="reveal font-mono text-ultra text-sm mb-5">03 / Architekti</div>
-    <h2 class="reveal font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(2.2rem,5.6vw,4.8rem)] max-w-4xl">Dva lidi. <span class="text-white/35">Žádná vata.</span></h2>
-    <p class="reveal mt-6 max-w-2xl text-lg text-white/55">Nemáme obchodníky, account manažery ani juniory, na které byste platili. Mluvíte přímo s těmi, kdo to navrhnou, napíšou a nasadí.</p>
+<section id="architekti" class="py-24 md:py-32 border-t border-white/[.08]">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="eyebrow">03 / Architekti</div>
+    <h2 class="h2 max-w-3xl">Dva lidi. <span class="dim">Žádná vata.</span></h2>
+    <p class="mt-5 max-w-2xl text-lg text-white/55">Nemáme obchodníky, account manažery ani juniory, na které byste platili. Mluvíte přímo s těmi, kdo to navrhnou, napíšou a nasadí.</p>
 
-    <div class="mt-16 grid md:grid-cols-2 gap-6">
-      <div class="tilt-wrap card-in">
-        <article class="glass tilt h-full p-8 md:p-10" style="--c:#34f5c5" data-hover>
-          <div class="flex flex-col sm:flex-row sm:items-center gap-8">
-            <!-- PLACEHOLDER: fotka Filipa – nahraďte <img> uvnitř .avatar -->
-            <div class="avatar pop shrink-0" style="--c:#34f5c5;--c2:#4d7cff">FŠ</div>
-            <div class="pop-sm">
-              <div class="font-mono text-xs text-mint mb-2">ARCHITEKT_01</div>
-              <h3 class="font-display font-bold text-3xl md:text-4xl tracking-tight">Filip Šerý</h3>
-              <div class="mt-1 text-white/45">spoluzakladatel</div>
-            </div>
+    <div class="mt-14 grid md:grid-cols-2 gap-5">
+      <article class="card p-7 md:p-8">
+        <div class="flex items-center gap-5">
+          <!-- PLACEHOLDER: fotka Filipa – nahraďte <img> uvnitř .avatar -->
+          <div class="avatar shrink-0">FŠ</div>
+          <div>
+            <h3 class="font-display font-bold text-2xl md:text-3xl tracking-tight">Filip Šerý</h3>
+            <div class="mt-1 text-white/55">spoluzakladatel</div>
           </div>
-          <p class="pop-sm mt-8 text-white/60 leading-relaxed">Staví věci od prvních principů. Když existuje hotové řešení, použije ho. Když neexistuje, napíše ho. Python, C++, machine learning a pipeline, které přežijí reálná data.</p>
-          <div class="pop-sm mt-7 flex flex-wrap gap-2 font-mono text-xs text-white/60">
-            <span class="px-3 py-1.5 rounded-full border border-white/10">Python</span><span class="px-3 py-1.5 rounded-full border border-white/10">C++</span><span class="px-3 py-1.5 rounded-full border border-white/10">ML</span><span class="px-3 py-1.5 rounded-full border border-white/10">OCR</span>
+        </div>
+        <p class="mt-7 text-white/60 leading-relaxed">Staví věci od prvních principů. Když existuje hotové řešení, použije ho. Když neexistuje, napíše ho. Python, C++, machine learning a pipeline, které přežijí reálná data.</p>
+        <div class="mt-6 flex flex-wrap gap-2 font-mono text-xs text-white/60">
+          <span class="chip">Python</span><span class="chip">C++</span><span class="chip">ML</span><span class="chip">OCR</span>
+        </div>
+      </article>
+      <article class="card p-7 md:p-8">
+        <div class="flex items-center gap-5">
+          <!-- PLACEHOLDER: fotka Vojty – nahraďte <img> uvnitř .avatar -->
+          <div class="avatar shrink-0">VP</div>
+          <div>
+            <h3 class="font-display font-bold text-2xl md:text-3xl tracking-tight">Vojta Pokorný</h3>
+            <div class="mt-1 text-white/55">spoluzakladatel</div>
           </div>
-        </article>
-      </div>
-      <div class="tilt-wrap card-in">
-        <article class="glass tilt h-full p-8 md:p-10" style="--c:#a66bff" data-hover>
-          <div class="flex flex-col sm:flex-row sm:items-center gap-8">
-            <!-- PLACEHOLDER: fotka Vojty – nahraďte <img> uvnitř .avatar -->
-            <div class="avatar pop shrink-0" style="--c:#a66bff;--c2:#4d7cff">VP</div>
-            <div class="pop-sm">
-              <div class="font-mono text-xs text-ultra mb-2">ARCHITEKT_02</div>
-              <h3 class="font-display font-bold text-3xl md:text-4xl tracking-tight">Vojta Pokorný</h3>
-              <div class="mt-1 text-white/45">spoluzakladatel</div>
-            </div>
-          </div>
-          <p class="pop-sm mt-8 text-white/60 leading-relaxed">Z nápadu udělá systém, který běží v provozu a nepadá. Řeší, aby technika seděla na to, jak firma opravdu funguje, ne na to, jak vypadá v organigramu.</p>
-          <div class="pop-sm mt-7 flex flex-wrap gap-2 font-mono text-xs text-white/60">
-            <span class="px-3 py-1.5 rounded-full border border-white/10">Automatizace</span><span class="px-3 py-1.5 rounded-full border border-white/10">Integrace</span><span class="px-3 py-1.5 rounded-full border border-white/10">Data</span><span class="px-3 py-1.5 rounded-full border border-white/10">Nasazení</span>
-          </div>
-        </article>
-      </div>
+        </div>
+        <p class="mt-7 text-white/60 leading-relaxed">Z nápadu udělá systém, který běží v provozu a nepadá. Řeší, aby technika seděla na to, jak firma opravdu funguje, ne na to, jak vypadá v organigramu.</p>
+        <div class="mt-6 flex flex-wrap gap-2 font-mono text-xs text-white/60">
+          <span class="chip">Automatizace</span><span class="chip">Integrace</span><span class="chip">Data</span><span class="chip">Nasazení</span>
+        </div>
+      </article>
     </div>
 
-    <div class="mt-6 grid md:grid-cols-3 gap-6">
-      <div class="reveal rounded-3xl border border-white/[.08] p-7"><div class="font-display font-bold text-xl">Žádný korporátní bullshit</div><p class="mt-2 text-white/50 text-sm leading-relaxed">Neprodáváme strategie ani workshopy. Dodáváme kód, který běží.</p></div>
-      <div class="reveal rounded-3xl border border-white/[.08] p-7"><div class="font-display font-bold text-xl">Nejdřív prototyp</div><p class="mt-2 text-white/50 text-sm leading-relaxed">Funkční verzi na vašich datech uvidíte dřív, než se zavážete k čemukoli velkému.</p></div>
-      <div class="reveal rounded-3xl border border-white/[.08] p-7"><div class="font-display font-bold text-xl">Těžké zadání vítáno</div><p class="mt-2 text-white/50 text-sm leading-relaxed">Nejvíc nás baví věci, o kterých vám jinde řekli, že nejdou.</p></div>
+    <div class="mt-14 grid md:grid-cols-3 gap-x-10 gap-y-8 border-t border-white/10 pt-8">
+      <div><div class="font-display font-semibold text-lg">Žádný korporátní bullshit</div><p class="mt-2 text-white/50 text-sm leading-relaxed">Neprodáváme strategie ani workshopy. Dodáváme kód, který běží.</p></div>
+      <div><div class="font-display font-semibold text-lg">Nejdřív prototyp</div><p class="mt-2 text-white/50 text-sm leading-relaxed">Funkční verzi na vašich datech uvidíte dřív, než se zavážete k čemukoli velkému.</p></div>
+      <div><div class="font-display font-semibold text-lg">Těžké zadání vítáno</div><p class="mt-2 text-white/50 text-sm leading-relaxed">Nejvíc nás baví věci, o kterých vám jinde řekli, že nejdou.</p></div>
     </div>
   </div>
 </section>
 
 <!-- BAND -->
-<div id="band" class="relative py-10 md:py-16 border-t border-white/[.07] overflow-hidden font-display font-bold select-none" aria-hidden="true">
-  <div class="band band-a">MÉNĚ RUTINY <span class="o">MÉNĚ RUTINY</span> MÉNĚ RUTINY <span class="o">MÉNĚ RUTINY</span> MÉNĚ RUTINY</div>
-  <div class="band band-b text-mint">VÍC VÝSLEDKŮ <span class="o">VÍC VÝSLEDKŮ</span> VÍC VÝSLEDKŮ <span class="o">VÍC VÝSLEDKŮ</span> VÍC VÝSLEDKŮ</div>
+<div id="band" class="py-10 md:py-14 border-t border-white/[.08] overflow-hidden font-display font-bold select-none" aria-hidden="true">
+  <div class="band band-a text-white/15">MÉNĚ RUTINY · MÉNĚ RUTINY · MÉNĚ RUTINY · MÉNĚ RUTINY · MÉNĚ RUTINY</div>
+  <div class="band band-b text-mint">VÍC VÝSLEDKŮ · VÍC VÝSLEDKŮ · VÍC VÝSLEDKŮ · VÍC VÝSLEDKŮ · VÍC VÝSLEDKŮ</div>
 </div>
 
 <!-- CTA -->
-<section id="kontakt" class="relative py-32 md:py-48 border-t border-white/[.07] overflow-hidden">
-  <div class="absolute inset-0 grid-bg opacity-70"></div>
-  <div id="cta-glow" class="absolute left-1/2 top-1/2 w-[900px] h-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full" style="background:radial-gradient(circle,rgba(52,245,197,.18),rgba(77,124,255,.1) 35%,transparent 65%)"></div>
-  <div class="relative max-w-5xl mx-auto px-5 md:px-8 text-center">
-    <div class="reveal font-mono text-mint text-sm mb-6">04 / Kontakt</div>
-    <h2 class="font-display font-bold tracking-[-0.045em] leading-[.95] text-[clamp(2.6rem,8vw,7rem)]">
-      <span class="line"><span>Kolik hodin týdně</span></span>
-      <span class="line"><span>vám žere <em class="not-italic grad">rutina?</em></span></span>
-    </h2>
-    <p class="reveal mt-8 text-lg md:text-xl text-white/55 max-w-2xl mx-auto">Napište nám pár vět o tom, co vás zdržuje. Ozveme se a řekneme na rovinu, jestli to umíme zautomatizovat a co to přinese.</p>
-    <div class="reveal mt-12 flex justify-center">
-      <a href="mailto:filseryx@gmail.com?subject=Popt%C3%A1vka%20z%20ai1st.cz" class="btn-main magnetic px-10 md:px-14 py-5 md:py-7 text-lg md:text-2xl font-display" data-strength="0.55" data-hover>
+<section id="kontakt" class="py-28 md:py-40 border-t border-white/[.08]">
+  <div class="max-w-4xl mx-auto px-5 md:px-8 text-center">
+    <div class="eyebrow">04 / Kontakt</div>
+    <h2 class="font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(2.4rem,6.4vw,5.25rem)]">Kolik hodin týdně vám žere <span class="text-mint">rutina?</span></h2>
+    <p class="mt-7 text-lg text-white/55 max-w-2xl mx-auto">Napište nám pár vět o tom, co vás zdržuje. Ozveme se a řekneme na rovinu, jestli to umíme zautomatizovat a co to přinese.</p>
+    <div class="mt-10 flex justify-center">
+      <a href="mailto:filseryx@gmail.com?subject=Popt%C3%A1vka%20z%20ai1st.cz" class="btn-main px-8 py-4 text-lg">
         <span>Nastartovat transformaci</span>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
-    <div class="reveal mt-9 font-mono text-sm text-white/45">nebo rovnou: <a class="text-white/80 underline decoration-mint/50 underline-offset-4 hover:text-mint transition" href="mailto:filseryx@gmail.com" data-hover>filseryx@gmail.com</a></div>
+    <div class="mt-7 font-mono text-sm text-white/55">nebo rovnou: <a class="navlink text-white/80 underline decoration-white/30 underline-offset-4" href="mailto:filseryx@gmail.com">filseryx@gmail.com</a></div>
   </div>
 </section>
 </main>
 
-<footer class="border-t border-white/[.07] py-9">
-  <div class="max-w-7xl mx-auto px-5 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/40">
+<footer class="border-t border-white/[.08] py-8">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/55">
     <div class="font-display font-bold text-lg text-white/80">ai<span class="text-mint">1st</span>.cz</div>
     <div>© <span id="yr">2026</span> Filip Šerý &amp; Vojta Pokorný · Praha</div>
-    <a href="#top" class="font-mono hover:text-white transition" data-hover>↑ nahoru</a>
+    <a href="#top" class="navlink font-mono">↑ nahoru</a>
   </div>
 </footer>
 
@@ -427,16 +360,15 @@
 (() => {
   document.getElementById('yr').textContent = new Date().getFullYear();
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
   const hasGsap = !!(window.gsap && window.ScrollTrigger);
 
   /* ---------- nav background ---------- */
   const nav = document.getElementById('nav');
   const onScroll = () => {
     const on = scrollY > 30;
-    nav.style.background = on ? 'rgba(5,6,10,.72)' : 'transparent';
-    nav.style.backdropFilter = nav.style.webkitBackdropFilter = on ? 'blur(16px)' : 'none';
-    nav.style.borderBottom = on ? '1px solid rgba(255,255,255,.07)' : '1px solid transparent';
+    nav.style.background = on ? 'rgba(7,8,11,.85)' : 'transparent';
+    nav.style.backdropFilter = nav.style.webkitBackdropFilter = on ? 'blur(12px)' : 'none';
+    nav.style.borderBottomColor = on ? 'rgba(255,255,255,.08)' : 'transparent';
   };
   addEventListener('scroll', onScroll, {passive:true}); onScroll();
 
@@ -448,65 +380,53 @@
     target.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
   }));
 
-  /* ---------- hero particles ---------- */
+  /* ---------- hero particles (quiet, one colour, pushed away by the pointer) ---------- */
   const hero = document.getElementById('hero'), cv = document.getElementById('fx'), ctx = cv.getContext('2d');
-  const spot = document.getElementById('spot');
-  let W, H, dpr, pts = [], running = true;
+  let W, H, pts = [], running = true;
   const mouse = {x:-9999, y:-9999};
-  const COLORS = ['52,245,197','77,124,255','166,107,255'];
-  function resize(){
-    dpr = Math.min(devicePixelRatio || 1, 2);
-    W = hero.clientWidth; H = hero.clientHeight;
-    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-    const n = Math.min(130, Math.floor(W * H / 11000));
-    pts = Array.from({length:n}, () => ({
-      x:Math.random()*W, y:Math.random()*H,
-      vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35,
-      r:Math.random()*1.6+.6, c:COLORS[Math.floor(Math.random()*3)]
-    }));
-  }
-  function frame(){
-    if (running) {
-      ctx.clearRect(0,0,W,H);
-      const L = 130, ML = 190;
-      for (let i=0;i<pts.length;i++){
-        const p = pts[i];
-        const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx,dy);
-        if (d < 150 && d > 0){ const f = (150-d)/150*.6; p.vx += dx/d*f*.08; p.vy += dy/d*f*.08; }
-        p.vx *= .985; p.vy *= .985;
-        if (Math.abs(p.vx) < .06) p.vx += (Math.random()-.5)*.03;
-        if (Math.abs(p.vy) < .06) p.vy += (Math.random()-.5)*.03;
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < -10) p.x = W+10; if (p.x > W+10) p.x = -10;
-        if (p.y < -10) p.y = H+10; if (p.y > H+10) p.y = -10;
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fillStyle = `rgba(${p.c},.85)`; ctx.fill();
-        for (let j=i+1;j<pts.length;j++){
-          const q = pts[j], ex = p.x-q.x, ey = p.y-q.y, e = ex*ex+ey*ey;
-          if (e < L*L){ ctx.strokeStyle = `rgba(${p.c},${(1-Math.sqrt(e)/L)*.22})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
-        }
-        if (d < ML){ ctx.strokeStyle = `rgba(52,245,197,${(1-d/ML)*.55})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke(); }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const L = 120;
+    for (let i=0;i<pts.length;i++){
+      const p = pts[i];
+      const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx,dy);
+      if (d < 140 && d > 0){ const f = (140-d)/140*.05; p.vx += dx/d*f; p.vy += dy/d*f; }
+      p.vx *= .985; p.vy *= .985;
+      if (Math.abs(p.vx) < .05) p.vx += (Math.random()-.5)*.03;
+      if (Math.abs(p.vy) < .05) p.vy += (Math.random()-.5)*.03;
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -10) p.x = W+10; if (p.x > W+10) p.x = -10;
+      if (p.y < -10) p.y = H+10; if (p.y > H+10) p.y = -10;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fillStyle = 'rgba(52,245,197,.5)'; ctx.fill();
+      for (let j=i+1;j<pts.length;j++){
+        const q = pts[j], ex = p.x-q.x, ey = p.y-q.y, e = ex*ex+ey*ey;
+        if (e < L*L){ ctx.strokeStyle = `rgba(255,255,255,${(1-Math.sqrt(e)/L)*.09})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
       }
     }
-    requestAnimationFrame(frame);
+  }
+  function resize(){
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = hero.clientWidth; H = hero.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n = Math.min(70, Math.floor(W * H / 20000));
+    pts = Array.from({length:n}, () => ({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25,
+      r:Math.random()*1.2+.5
+    }));
+    if (reduce) draw();
   }
   resize(); addEventListener('resize', resize);
-  if (!reduce) requestAnimationFrame(frame); else { running = true; frame = () => {}; }
-  new IntersectionObserver(e => running = e[0].isIntersecting).observe(hero);
-  hero.addEventListener('pointermove', e => {
-    const r = hero.getBoundingClientRect();
-    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-    spot.style.setProperty('--sx', mouse.x + 'px'); spot.style.setProperty('--sy', mouse.y + 'px');
-  });
-  hero.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
-
-  /* ---------- card glow follows pointer (works without GSAP) ---------- */
-  document.querySelectorAll('.glass').forEach(el => {
-    el.addEventListener('pointermove', e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  if (!reduce) {
+    const frame = () => { if (running) draw(); requestAnimationFrame(frame); };
+    requestAnimationFrame(frame);
+    new IntersectionObserver(e => running = e[0].isIntersecting).observe(hero);
+    hero.addEventListener('pointermove', e => {
+      const r = hero.getBoundingClientRect();
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
     });
-  });
+    hero.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
+  }
 
   /* ---------- pseudonymization demo ---------- */
   const toks = [...document.querySelectorAll('.tok')];
@@ -516,7 +436,8 @@
   let demoBusy = false;
   function scramble(el, target, delay){
     return new Promise(res => setTimeout(() => {
-      let f = 0; const total = 16;
+      if (reduce) { el.textContent = target; el.classList.add('safe'); return res(); }
+      let f = 0; const total = 12;
       const iv = setInterval(() => {
         f++;
         const keep = Math.floor(target.length * f / total);
@@ -524,170 +445,84 @@
         for (let i = keep; i < target.length; i++) s += CH[Math.floor(Math.random()*CH.length)];
         el.textContent = s;
         if (f >= total){ clearInterval(iv); el.textContent = target; el.classList.add('safe'); res(); }
-      }, 34);
+      }, 30);
     }, delay));
   }
   function setState(safe){
     stateEl.textContent = safe ? 'PSEUDONYMIZOVÁNO' : 'ORIGINÁL';
     stateEl.style.color = safe ? '#34f5c5' : '#ff8ea3';
-    stateEl.style.borderColor = safe ? 'rgba(52,245,197,.45)' : 'rgba(255,90,120,.4)';
+    stateEl.style.borderColor = safe ? 'rgba(52,245,197,.4)' : 'rgba(255,90,120,.4)';
   }
   async function runDemo(){
     if (demoBusy) return; demoBusy = true;
     toks.forEach(t => { t.textContent = t.dataset.o; t.classList.remove('safe'); }); setState(false);
-    await new Promise(r => setTimeout(r, 500));
-    if (hasGsap && !reduce) gsap.fromTo(scan, {top:0, opacity:1}, {top:'100%', opacity:0, duration:1.5, ease:'power1.inOut'});
-    await Promise.all(toks.map((t,i) => scramble(t, t.dataset.t, i*210)));
+    await new Promise(r => setTimeout(r, 400));
+    if (hasGsap && !reduce) gsap.fromTo(scan, {top:0, opacity:.7}, {top:'100%', opacity:0, duration:1.2, ease:'none'});
+    await Promise.all(toks.map((t,i) => scramble(t, t.dataset.t, i*150)));
     setState(true); demoBusy = false;
   }
   document.getElementById('demo-btn').addEventListener('click', runDemo);
 
-  /* ---------- no GSAP? show everything statically ---------- */
+  /* ---------- no GSAP or reduced motion: show everything statically ---------- */
   if (!hasGsap || reduce) {
     document.querySelectorAll('.step').forEach(s => s.classList.add('on'));
-    const rf = document.getElementById('rail-fill'); if (rf) rf.style.transform = 'scaleY(1)';
+    document.getElementById('rail-fill').style.transform = 'scaleY(1)';
+    document.getElementById('manifest-bar').style.transform = 'scaleX(1)';
+    document.getElementById('manifest-text').style.opacity = 1;
     new IntersectionObserver((e,o) => { if (e[0].isIntersecting){ runDemo(); o.disconnect(); } }, {threshold:.5}).observe(document.getElementById('demo'));
     return;
   }
 
   gsap.registerPlugin(ScrollTrigger);
+  const OUT = 'expo.out'; /* strong ease-out, close to cubic-bezier(.23,1,.32,1) */
 
-  /* progress bar */
-  gsap.to('#progress', {scaleX:1, ease:'none', scrollTrigger:{trigger:document.documentElement, start:'top top', end:'bottom bottom', scrub:.3}});
-
-  /* hero intro */
-  const tl = gsap.timeline({defaults:{ease:'power4.out'}});
-  tl.from('#nav', {y:-40, opacity:0, duration:.9})
-    .from('#hero .line>span', {yPercent:115, duration:1.25, stagger:.13}, '-=.5')
-    .from('.hero-fade', {y:30, opacity:0, duration:.9, stagger:.1}, '-=.8')
-    .from('#fx', {opacity:0, duration:1.6}, 0);
-
-  /* hero parallax out */
-  gsap.to('#hero-inner', {yPercent:-14, opacity:.15, scale:.96, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:true}});
-  gsap.utils.toArray('#hero .orb').forEach(o => {
-    gsap.to(o, {y:() => innerHeight * parseFloat(o.dataset.speed || .3), ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:true}});
-    gsap.to(o, {x:'+=40', scale:1.12, duration:6 + Math.random()*4, yoyo:true, repeat:-1, ease:'sine.inOut'});
-  });
-
-  /* generic reveals */
-  gsap.utils.toArray('.reveal').forEach(el => {
-    if (el.tagName === 'H2') return;
-    gsap.from(el, {y:44, opacity:0, duration:1, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 88%'}});
-  });
-  ScrollTrigger.batch('.card-in', {
-    start:'top 88%', once:true,
-    onEnter: b => gsap.from(b, {y:90, opacity:0, rotateX:-14, transformOrigin:'50% 100%', duration:1.15, ease:'power3.out', stagger:.14})
-  });
-  gsap.utils.toArray('#kontakt .line>span').forEach((el,i) => {
-    gsap.from(el, {yPercent:115, duration:1.2, ease:'power4.out', delay:i*.12, scrollTrigger:{trigger:'#kontakt h2', start:'top 85%'}});
-  });
+  /* hero enters once on load */
+  gsap.timeline({defaults:{ease:OUT}})
+    .from('#hero .line>span', {yPercent:105, duration:.8, stagger:.07})
+    .from('.hero-fade', {y:12, opacity:0, duration:.5, stagger:.05}, '-=.55')
+    .from('#fx', {opacity:0, duration:.8, ease:'none'}, 0);
 
   /* pipeline rail + steps */
-  gsap.to('#rail-fill', {scaleY:1, ease:'none', scrollTrigger:{trigger:'#steps', start:'top 65%', end:'bottom 65%', scrub:.4}});
+  gsap.to('#rail-fill', {scaleY:1, ease:'none', scrollTrigger:{trigger:'#steps', start:'top 65%', end:'bottom 65%', scrub:.3}});
   gsap.utils.toArray('.step').forEach(s => {
     ScrollTrigger.create({trigger:s, start:'top 68%', onEnter:() => s.classList.add('on'), onLeaveBack:() => s.classList.remove('on')});
-    gsap.from(s, {x:-30, duration:.9, ease:'power3.out', scrollTrigger:{trigger:s, start:'top 85%'}});
   });
   ScrollTrigger.create({trigger:'#demo', start:'top 70%', once:true, onEnter:runDemo});
 
-  /* big word parallax + CTA glow */
-  gsap.fromTo('#bigword', {xPercent:12}, {xPercent:-12, ease:'none', scrollTrigger:{trigger:'#architekti', start:'top bottom', end:'bottom top', scrub:true}});
-  gsap.fromTo('#cta-glow', {scale:.6, opacity:.4}, {scale:1.25, opacity:1, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top bottom', end:'center center', scrub:true}});
-  gsap.to('#cta-glow', {rotate:360, duration:40, repeat:-1, ease:'none'});
-
-  /* ---------- extra scroll choreography ---------- */
-  const splitWords = (el, cls) => {
-    const out = [];
-    const walk = node => {
-      [...node.childNodes].forEach(n => {
-        if (n.nodeType === 3) {
-          const parts = n.textContent.split(' '), frag = document.createDocumentFragment();
-          parts.forEach((part, i) => {
-            if (part) { const s = document.createElement('span'); s.className = cls; s.textContent = part; frag.appendChild(s); out.push(s); }
-            if (i < parts.length - 1) frag.appendChild(document.createTextNode(' '));
-          });
-          n.replaceWith(frag);
-        } else if (n.nodeType === 1) {
-          if (n.classList.contains('grad')) { n.classList.add('w'); out.push(n); } else walk(n);
-        }
-      });
-    };
-    walk(el); return out;
-  };
-
-  /* headings: word-by-word, tied to scroll */
-  gsap.utils.toArray('h2.reveal').forEach(h => {
-    const words = splitWords(h, 'w');
-    gsap.from(words, {yPercent:70, opacity:0, rotateX:-55, transformOrigin:'50% 100%', stagger:.08, ease:'power3.out',
-      scrollTrigger:{trigger:h, start:'top 92%', end:'top 48%', scrub:.6}});
-  });
-
-  /* hero lines drift apart */
-  gsap.utils.toArray('#hero .line').forEach((l, i) => {
-    gsap.to(l, {xPercent:[-9, 7, -5][i] || 0, ease:'none', scrollTrigger:{trigger:'#hero', start:'top top', end:'bottom top', scrub:true}});
-  });
-
-  /* marquee leans with scroll velocity */
-  const mq = document.querySelector('.marquee').parentElement;
-  const skew = gsap.quickTo(mq, 'skewX', {duration:.5, ease:'power3.out'});
-  ScrollTrigger.create({onUpdate: self => skew(gsap.utils.clamp(-14, 14, self.getVelocity() / -160))});
-  ScrollTrigger.addEventListener('scrollEnd', () => skew(0));
-
-  /* service cards: staggered parallax + icons */
-  if (matchMedia('(min-width:1024px)').matches) {
-    gsap.utils.toArray('#sluzby .glass').forEach((c, i) => {
-      gsap.fromTo(c, {y:30 + i * 45}, {y:-i * 30, ease:'none', scrollTrigger:{trigger:'#sluzby .grid', start:'top bottom', end:'bottom top', scrub:.6}});
-    });
-  }
-  gsap.utils.toArray('.icon-box').forEach(b => {
-    gsap.from(b, {rotate:-90, scale:.3, opacity:0, duration:1.1, ease:'back.out(1.7)', scrollTrigger:{trigger:b, start:'top 88%'}});
-  });
-
   /* manifest: pinned, words light up */
-  const mw = splitWords(document.getElementById('manifest-text'), 'w mf-w');
-  const mtl = gsap.timeline({scrollTrigger:{trigger:'#manifest', start:'top top', end:'+=130%', pin:true, scrub:.5, refreshPriority:2}});
-  mtl.to(mw, {opacity:1, stagger:.08, ease:'none', duration:.3});
+  const mt = document.getElementById('manifest-text');
+  mt.innerHTML = mt.textContent.split(' ').map(w => `<span class="mf-w">${w}</span>`).join(' ');
+  const mtl = gsap.timeline({scrollTrigger:{trigger:'#manifest', start:'top top', end:'+=110%', pin:true, scrub:.4, refreshPriority:2}});
+  mtl.to('.mf-w', {opacity:1, stagger:.08, ease:'none', duration:.3});
   mtl.to('#manifest-bar', {scaleX:1, ease:'none', duration:mtl.duration()}, 0);
 
-  /* demo card slides in */
-  gsap.from('#demo', {x:90, scale:.9, ease:'none', scrollTrigger:{trigger:'#pipeline .grid', start:'top 85%', end:'top 30%', scrub:.6}});
-
-  /* avatars */
-  gsap.utils.toArray('.avatar').forEach(a => {
-    gsap.from(a, {scale:.3, rotate:-120, opacity:0, duration:1.2, ease:'back.out(1.6)', scrollTrigger:{trigger:a, start:'top 88%'}});
-  });
-
-  /* big text bands move against each other */
-  gsap.fromTo('.band-a', {xPercent:-30}, {xPercent:0, ease:'none', scrollTrigger:{trigger:'#band', start:'top bottom', end:'bottom top', scrub:.4}});
-  gsap.fromTo('.band-b', {xPercent:0}, {xPercent:-30, ease:'none', scrollTrigger:{trigger:'#band', start:'top bottom', end:'bottom top', scrub:.4}});
-
-  /* CTA button grows in, grid drifts */
-  gsap.from('#kontakt .btn-main', {scale:.6, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top 70%', end:'center center', scrub:.5}});
-  gsap.to('#kontakt .grid-bg', {yPercent:18, ease:'none', scrollTrigger:{trigger:'#kontakt', start:'top bottom', end:'bottom top', scrub:true}});
+  /* bands drift against each other */
+  gsap.fromTo('.band-a', {xPercent:-12}, {xPercent:0, ease:'none', scrollTrigger:{trigger:'#band', start:'top bottom', end:'bottom top', scrub:.4}});
+  gsap.fromTo('.band-b', {xPercent:0}, {xPercent:-12, ease:'none', scrollTrigger:{trigger:'#band', start:'top bottom', end:'bottom top', scrub:.4}});
 
   /* case: one document flowing through the automation */
   const desk = matchMedia('(min-width:1024px)').matches;
   const csSteps = gsap.utils.toArray('.cs-step');
-  const lit = () => ({color:'#34f5c5', borderColor:'rgba(52,245,197,.6)', backgroundColor:'rgba(52,245,197,.08)', duration:.3});
+  const lit = () => ({color:'#34f5c5', borderColor:'rgba(52,245,197,.5)', duration:.3});
   const cs = gsap.timeline({defaults:{ease:'power2.out'}, scrollTrigger: desk
-    ? {trigger:'#case', start:'top top', end:'+=230%', pin:true, scrub:.6, refreshPriority:1}
-    : {trigger:'#case', start:'top 75%', end:'bottom 75%', scrub:.6}});
+    ? {trigger:'#case', start:'top top', end:'+=200%', pin:true, scrub:.5, refreshPriority:1}
+    : {trigger:'#case', start:'top 75%', end:'bottom 75%', scrub:.5}});
   cs.to(csSteps[0], lit())
-    .from('#cs-doc', {y:70, opacity:0, rotate:-5, duration:.8}, '<')
+    .from('#cs-doc', {y:24, opacity:0, duration:.6}, '<')
     .to(csSteps[1], lit())
-    .fromTo('#cs-scan', {top:0, opacity:0}, {top:'100%', opacity:1, duration:1.2, ease:'none'}, '<')
+    .fromTo('#cs-scan', {top:0, opacity:0}, {top:'100%', opacity:.7, duration:1.2, ease:'none'}, '<')
     .fromTo('#case .sk', {opacity:1}, {opacity:0, stagger:.15, duration:.3}, '<0.1')
     .from('#case .tx', {opacity:0, stagger:.15, duration:.3}, '<')
     .to('#cs-scan', {opacity:0, duration:.15})
     .from('#cs-ocr', {opacity:0, duration:.3}, '<')
     .to(csSteps[2], lit())
-    .to('#case .hl', {backgroundColor:'rgba(52,245,197,.16)', color:'#34f5c5', stagger:.12, duration:.3}, '<')
+    .to('#case .hl', {backgroundColor:'rgba(52,245,197,.14)', color:'#34f5c5', stagger:.12, duration:.3}, '<')
     .from('#cs-beam i', desk ? {scaleX:0, transformOrigin:'0 50%', duration:.6, ease:'none'} : {scaleY:0, transformOrigin:'50% 0', duration:.6, ease:'none'})
-    .from('#cs-panel', {opacity:.25, scale:.94, duration:.5}, '<')
-    .from('#case .cs-v', {opacity:0, x:-18, stagger:.18, duration:.35})
+    .from('#cs-panel', {opacity:.3, duration:.5}, '<')
+    .from('#case .cs-v', {opacity:0, x:-8, stagger:.18, duration:.35})
     .to(csSteps[3], lit())
-    .from('#case .cs-c', {opacity:0, x:-18, stagger:.22, duration:.35}, '<')
-    .from('#cs-done', {opacity:0, scale:.8, duration:.4})
+    .from('#case .cs-c', {opacity:0, x:-8, stagger:.22, duration:.35}, '<')
+    .from('#cs-done', {opacity:0, duration:.4})
     .to({}, {duration:.5});
 
   ScrollTrigger.sort(); ScrollTrigger.refresh();
@@ -705,46 +540,6 @@
   new ResizeObserver(remeasure).observe(document.body);
   addEventListener('load', remeasure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
-
-  if (!fine) return;
-
-  /* 3D tilt */
-  document.querySelectorAll('.tilt').forEach(el => {
-    const rx = gsap.quickTo(el, 'rotationX', {duration:.5, ease:'power3.out'});
-    const ry = gsap.quickTo(el, 'rotationY', {duration:.5, ease:'power3.out'});
-    gsap.set(el, {transformPerspective:1100});
-    el.addEventListener('pointermove', e => {
-      const r = el.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
-      ry(px * 14); rx(-py * 12);
-    });
-    el.addEventListener('pointerleave', () => { rx(0); ry(0); });
-  });
-
-  /* magnetic buttons */
-  document.querySelectorAll('.magnetic').forEach(btn => {
-    const k = parseFloat(btn.dataset.strength || .4), inner = btn.querySelector('span');
-    const bx = gsap.quickTo(btn, 'x', {duration:.6, ease:'elastic.out(1,.45)'}), by = gsap.quickTo(btn, 'y', {duration:.6, ease:'elastic.out(1,.45)'});
-    const ix = gsap.quickTo(inner, 'x', {duration:.6, ease:'power3.out'}), iy = gsap.quickTo(inner, 'y', {duration:.6, ease:'power3.out'});
-    const pad = 70;
-    addEventListener('pointermove', e => {
-      const r = btn.getBoundingClientRect();
-      const cx = r.left + r.width/2, cy = r.top + r.height/2;
-      const inside = e.clientX > r.left - pad && e.clientX < r.right + pad && e.clientY > r.top - pad && e.clientY < r.bottom + pad;
-      if (inside){ const dx = e.clientX - cx - gsap.getProperty(btn,'x'), dy = e.clientY - cy - gsap.getProperty(btn,'y'); bx(dx*k); by(dy*k); ix(dx*k*.35); iy(dy*k*.35); }
-      else { bx(0); by(0); ix(0); iy(0); }
-    }, {passive:true});
-  });
-
-  /* custom cursor */
-  const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
-  const cx = gsap.quickTo(cur,'x',{duration:.08}), cy = gsap.quickTo(cur,'y',{duration:.08});
-  const rxx = gsap.quickTo(ring,'x',{duration:.35, ease:'power3.out'}), ryy = gsap.quickTo(ring,'y',{duration:.35, ease:'power3.out'});
-  addEventListener('pointermove', e => { cx(e.clientX); cy(e.clientY); rxx(e.clientX); ryy(e.clientY); }, {passive:true});
-  document.querySelectorAll('[data-hover]').forEach(el => {
-    el.addEventListener('pointerenter', () => ring.classList.add('big'));
-    el.addEventListener('pointerleave', () => ring.classList.remove('big'));
-  });
 })();
 </script>
 </body>
