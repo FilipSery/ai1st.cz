@@ -53,6 +53,21 @@
   .navlink{transition:color .2s ease}
   .navlink:hover{color:#fff}
 
+  /* contact form */
+  .field{display:block}
+  .field>span{display:block;font-size:14px;font-weight:500;color:rgba(255,255,255,.8);margin-bottom:.45rem}
+  .field>span i{font-style:normal;font-weight:400;color:rgba(255,255,255,.55)}
+  .field input,.field textarea{width:100%;padding:.85rem 1rem;border-radius:10px;background:var(--ink);border:1px solid rgba(255,255,255,.16);color:#e8eaf0;font:inherit;font-size:16px;transition:border-color .15s ease}
+  .field textarea{min-height:8.5rem;resize:vertical;line-height:1.5}
+  .field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.4)}
+  .field input:hover,.field textarea:hover{border-color:rgba(255,255,255,.3)}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--mint)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  #form-msg{display:none;margin-top:1rem;padding:.85rem 1rem;border-radius:10px;font-size:15px;line-height:1.5}
+  #form-msg.ok{display:block;background:rgba(52,245,197,.08);border:1px solid rgba(52,245,197,.35);color:#c9fbee}
+  #form-msg.err{display:block;background:rgba(255,90,120,.08);border:1px solid rgba(255,90,120,.35);color:#ffc2cd}
+  .btn-main[disabled]{opacity:.6;cursor:default}
+
   /* pipeline */
   .rail{position:absolute;left:19px;top:8px;bottom:8px;width:1px;background:var(--line)}
   .rail>i{position:absolute;inset:0;background:var(--mint);transform-origin:top;transform:scaleY(0)}
@@ -330,18 +345,35 @@
 </div>
 
 <!-- CTA -->
-<section id="kontakt" class="py-28 md:py-40 border-t border-white/[.08]">
-  <div class="max-w-4xl mx-auto px-5 md:px-8 text-center">
-    <div class="eyebrow">04 / Kontakt</div>
-    <h2 class="font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(2.4rem,6.4vw,5.25rem)]">Kolik hodin týdně vám žere <span class="text-mint">rutina?</span></h2>
-    <p class="mt-7 text-lg text-white/55 max-w-2xl mx-auto">Napište nám pár vět o tom, co vás zdržuje. Ozveme se a řekneme na rovinu, jestli to umíme zautomatizovat a co to přinese.</p>
-    <div class="mt-10 flex justify-center">
-      <a href="mailto:filseryx@gmail.com?subject=Popt%C3%A1vka%20z%20ai1st.cz" class="btn-main px-8 py-4 text-lg">
-        <span>Nastartovat transformaci</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
+<section id="kontakt" class="py-24 md:py-32 border-t border-white/[.08]">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+    <div>
+      <div class="eyebrow">04 / Kontakt</div>
+      <h2 class="font-display font-bold tracking-[-0.04em] leading-[1] text-[clamp(2.4rem,5vw,4.25rem)]">Kolik hodin týdně vám žere <span class="text-mint">rutina?</span></h2>
+      <p class="mt-6 text-lg text-white/60 max-w-xl">Napište nám pár vět o tom, co vás zdržuje. Ozveme se a řekneme na rovinu, jestli to umíme zautomatizovat a co to přinese.</p>
+      <ul class="mt-8 space-y-3 text-white/70">
+        <li class="flex gap-3"><span class="text-mint" aria-hidden="true">✓</span>Nezávazně, napsat nic nestojí</li>
+        <li class="flex gap-3"><span class="text-mint" aria-hidden="true">✓</span>Odpoví vám přímo Filip nebo Vojta</li>
+        <li class="flex gap-3"><span class="text-mint" aria-hidden="true">✓</span>Funkční prototyp dřív, než se k čemukoli zavážete</li>
+      </ul>
+      <div class="mt-8 font-mono text-sm text-white/55">Radši e-mailem? <a class="navlink text-white/80 underline decoration-white/30 underline-offset-4" href="mailto:filseryx@gmail.com?subject=Popt%C3%A1vka%20z%20ai1st.cz">filseryx@gmail.com</a></div>
     </div>
-    <div class="mt-7 font-mono text-sm text-white/55">nebo rovnou: <a class="navlink text-white/80 underline decoration-white/30 underline-offset-4" href="mailto:filseryx@gmail.com">filseryx@gmail.com</a></div>
+
+    <form id="contact-form" class="card p-6 md:p-8" novalidate>
+      <div class="grid sm:grid-cols-2 gap-5">
+        <label class="field"><span>Jméno</span><input type="text" name="name" autocomplete="name" required maxlength="100"></label>
+        <label class="field"><span>E-mail</span><input type="email" name="email" autocomplete="email" required maxlength="150"></label>
+      </div>
+      <label class="field mt-5"><span>Firma <i>(nepovinné)</i></span><input type="text" name="company" autocomplete="organization" maxlength="150"></label>
+      <label class="field mt-5"><span>Co vás zdržuje?</span><textarea name="message" required maxlength="4000" placeholder="Třeba: každý týden ručně přepisujeme údaje z faktur do systému."></textarea></label>
+      <label class="hp" aria-hidden="true">Nevyplňujte<input type="text" name="botcheck" tabindex="-1" autocomplete="off"></label>
+      <button type="submit" class="btn-main mt-6 w-full justify-center px-8 py-4 text-lg">
+        <span>Odeslat zprávu</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <div id="form-msg" role="status" aria-live="polite"></div>
+      <p class="mt-4 text-sm text-white/55 leading-relaxed">Údaje použijeme jen k odpovědi na vaši zprávu. Podrobnosti v <a class="navlink underline decoration-white/30 underline-offset-4" href="zpracovani-osobnich-udaju.html">zásadách zpracování osobních údajů</a>.</p>
+    </form>
   </div>
 </section>
 </main>
@@ -350,7 +382,7 @@
   <div class="max-w-6xl mx-auto px-5 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/55">
     <div class="font-display font-bold text-lg text-white/80">ai<span class="text-mint">1st</span>.cz</div>
     <div>© <span id="yr">2026</span> Filip Šerý &amp; Vojta Pokorný · Praha</div>
-    <a href="#top" class="navlink font-mono">↑ nahoru</a>
+    <div class="flex items-center gap-6"><a href="zpracovani-osobnich-udaju.html" class="navlink">Zpracování osobních údajů</a><a href="#top" class="navlink font-mono">↑ nahoru</a></div>
   </div>
 </footer>
 
@@ -359,6 +391,40 @@
 <script>
 (() => {
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ---------- contact form ----------
+     GitHub Pages cannot send mail itself. With a Web3Forms access key the message is sent straight
+     from the page; without one the form opens the visitor's e-mail app with the message prefilled. */
+  const WEB3FORMS_KEY = '';                      /* paste the access key from web3forms.com here */
+  const CONTACT_EMAIL = 'filseryx@gmail.com';
+  const form = document.getElementById('contact-form'), msg = document.getElementById('form-msg');
+  const say = (kind, html) => { msg.className = kind; msg.innerHTML = html; };
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(form).entries());
+    if (d.botcheck) return;                      /* honeypot: bots fill it, people never see it */
+    const bad = [...form.querySelectorAll('[required]')].find(el => !el.value.trim() || !el.checkValidity());
+    if (bad) { say('err', bad.name === 'email' ? 'Zkontrolujte prosím e-mailovou adresu.' : 'Vyplňte prosím jméno, e-mail a zprávu.'); bad.focus(); return; }
+    const subject = 'Poptávka z ai1st.cz' + (d.company ? ' – ' + d.company : '');
+    if (!WEB3FORMS_KEY) {
+      const body = `${d.message}\n\n${d.name}${d.company ? ', ' + d.company : ''}\n${d.email}`;
+      location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      say('ok', `Otevřeli jsme váš e-mailový program s připravenou zprávou, stačí ji odeslat. Nic se neotevřelo? Napište na <a class="underline" href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>.`);
+      return;
+    }
+    const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
+    try {
+      const r = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+        body: JSON.stringify({access_key: WEB3FORMS_KEY, subject, from_name: 'ai1st.cz', name: d.name, email: d.email, company: d.company, message: d.message})
+      });
+      const j = await r.json();
+      if (!r.ok || !j.success) throw new Error(j.message || r.status);
+      form.reset(); say('ok', 'Díky, zpráva je u nás. Ozveme se vám na uvedený e-mail.');
+    } catch (err) {
+      say('err', `Zprávu se nepodařilo odeslat. Napište nám prosím přímo na <a class="underline" href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>.`);
+    } finally { btn.disabled = false; }
+  });
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasGsap = !!(window.gsap && window.ScrollTrigger);
 
