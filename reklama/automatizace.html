@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ai1st.cz – reklama: automatizace spisů (4:5, 16 s)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap&subset=latin-ext" rel="stylesheet">
+<style>
+  :root{--mint:#34f5c5;--ink:#07080b;--panel:#0f1218;--line:rgba(255,255,255,.12);--red:#ff8ea3;--yellow:#ffe14d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden}
+  /* 1080 x 1350 stage (Meta feed 4:5), scaled to fit the window */
+  #stage{position:absolute;left:50%;top:50%;width:1080px;height:1350px;margin:-675px 0 0 -540px;background:var(--ink);color:#eef0f5;font-family:Inter,system-ui,sans-serif;overflow:hidden;transform-origin:50% 50%;-webkit-font-smoothing:antialiased}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+  .disp{font-family:"Space Grotesk",system-ui,sans-serif}
+
+  /* fixed chrome */
+  #logo{position:absolute;left:72px;top:64px;font:700 40px "Space Grotesk",sans-serif;letter-spacing:-.02em}
+  #logo b{color:var(--mint);font-weight:700} #logo i{font-style:normal;color:rgba(255,255,255,.5)}
+  #tag{position:absolute;right:72px;top:74px;font:500 22px "JetBrains Mono",monospace;color:rgba(255,255,255,.55)}
+  #bar{position:absolute;left:72px;right:72px;bottom:64px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+  #bar i{display:block;height:100%;background:var(--mint);transform-origin:0 50%;transform:scaleX(0)}
+
+  /* scenes */
+  .sc{position:absolute;inset:0;opacity:0}
+  .kick{position:absolute;left:72px;top:176px;font:500 26px "JetBrains Mono",monospace;color:var(--mint)}
+  .head{position:absolute;left:72px;right:72px;top:226px;font:700 80px/1.04 "Space Grotesk",sans-serif;letter-spacing:-.035em}
+  .head em{font-style:normal;color:var(--mint)}
+  .head .dim{color:rgba(255,255,255,.5)}
+  .vis{position:absolute;left:72px;right:72px;top:590px;bottom:128px}
+  .card{position:absolute;inset:0;border-radius:28px;background:var(--panel);border:1px solid var(--line);overflow:hidden}
+  .card-top{display:flex;justify-content:space-between;align-items:center;padding:26px 36px;border-bottom:1px solid var(--line);font:500 24px "JetBrains Mono",monospace;color:rgba(255,255,255,.6)}
+  .pill{padding:8px 18px;border-radius:999px;border:1px solid var(--line);font:500 21px "JetBrains Mono",monospace;color:rgba(255,255,255,.7)}
+  .pill.ok{color:var(--mint);border-color:rgba(52,245,197,.5)}
+
+  /* podací arch (table of scanned rows) */
+  .rows{padding:18px 36px}
+  .row{position:relative;display:flex;align-items:center;gap:26px;height:56px;font:400 27px "JetBrains Mono",monospace;color:rgba(255,255,255,.62)}
+  .row .n{width:48px;color:rgba(255,255,255,.35)}
+  .row .rr{width:270px;position:relative;z-index:1}
+  .row .sk{height:14px;border-radius:7px;background:rgba(255,255,255,.1);position:relative;z-index:1}
+  .row .hit{position:absolute;left:-36px;right:-36px;top:4px;bottom:4px;background:var(--yellow);opacity:0;transform-origin:0 50%}
+  .row.target.lit{color:#111}
+  #lens{position:absolute;left:24px;width:372px;height:60px;top:115px;border:3px solid rgba(255,255,255,.75);border-radius:14px}
+  #hand{position:absolute;right:36px;bottom:30px}
+  .scan{position:absolute;left:0;right:0;top:112px;height:3px;background:var(--mint);opacity:0}
+
+  /* výzva */
+  .doc{padding:34px 40px;font:400 28px/1.9 "JetBrains Mono",monospace;color:rgba(255,255,255,.72)}
+  .doc h3{font:600 34px "Space Grotesk",sans-serif;color:#fff;margin-bottom:12px;letter-spacing:-.01em}
+  .doc .skl{display:block;height:14px;border-radius:7px;background:rgba(255,255,255,.1);margin:22px 0}
+  #rrsrc{border-radius:8px;padding:8px 14px;margin-left:-14px}
+  #chip{position:absolute;left:40px;bottom:40px;padding:18px 28px;border-radius:16px;background:var(--mint);color:var(--ink);font:500 34px "JetBrains Mono",monospace}
+  #chip small{display:block;font-size:20px;opacity:.7;margin-bottom:2px}
+
+  /* pseudonymizace */
+  .tk{display:inline-grid;vertical-align:baseline;border-radius:8px;padding:4px 14px;line-height:1.3;margin:0 2px;background:rgba(255,90,120,.12);color:var(--red);border:1px solid rgba(255,90,120,.35);white-space:nowrap}
+  .tk>span{grid-area:1/1}
+  .tk .b{opacity:0;color:var(--mint)}
+  #lock{position:absolute;left:40px;right:40px;bottom:36px;display:flex;justify-content:space-between;align-items:center;font:500 23px "JetBrains Mono",monospace;color:rgba(255,255,255,.6)}
+
+  /* spis */
+  .files{padding:22px 36px}
+  .file{display:flex;align-items:center;gap:22px;height:78px;border-bottom:1px solid rgba(255,255,255,.08);font:400 25px "JetBrains Mono",monospace;color:rgba(255,255,255,.8)}
+  .file .ck{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(52,245,197,.14);color:var(--mint);font-size:22px}
+  .file .sp{color:rgba(255,255,255,.5);margin-left:auto}
+  #zero{position:absolute;left:36px;right:36px;bottom:34px;display:flex;justify-content:space-between;align-items:baseline}
+  #zero b{font:700 96px/1 "Space Grotesk",sans-serif;color:var(--mint);letter-spacing:-.04em}
+  #zero span{font:500 30px "Space Grotesk",sans-serif;color:rgba(255,255,255,.75)}
+
+  /* end card */
+  #s6 .big{position:absolute;left:72px;right:72px;top:330px;font:700 104px/1 "Space Grotesk",sans-serif;letter-spacing:-.04em}
+  #s6 .big em{font-style:normal;color:var(--mint)}
+  #s6 p{position:absolute;left:72px;right:140px;top:700px;font:400 36px/1.4 Inter,sans-serif;color:rgba(255,255,255,.7)}
+  #cta{position:absolute;left:72px;top:900px;display:inline-flex;align-items:center;gap:18px;padding:30px 48px;border-radius:999px;background:var(--mint);color:var(--ink);font:600 40px "Space Grotesk",sans-serif}
+  #url{position:absolute;left:72px;top:1070px;font:700 64px "Space Grotesk",sans-serif;letter-spacing:-.03em}
+  #url b{color:var(--mint)} #url i{font-style:normal;color:rgba(255,255,255,.5)}
+  #note{position:absolute;left:72px;bottom:92px;font:400 20px "JetBrains Mono",monospace;color:rgba(255,255,255,.5)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="logo">ai<b>1st</b><i>.cz</i></div>
+  <div id="tag">automatizace pro advokátní kanceláře</div>
+
+  <!-- 1 · problem -->
+  <section class="sc" id="s1">
+    <div class="kick">Znáte to?</div>
+    <h2 class="head">Jedno číslo.<br>Stovky skenů.<br><span class="dim">A hledá se ručně.</span></h2>
+    <div class="vis"><div class="card">
+      <div class="card-top"><span>podaci_arch.pdf</span><span class="pill">strana 1 z 312</span></div>
+      <div class="rows" id="rows1"></div>
+      <div id="lens"></div>
+    </div></div>
+  </section>
+
+  <!-- 2 · read the number -->
+  <section class="sc" id="s2">
+    <div class="kick">Krok 1</div>
+    <h2 class="head">Stroj si číslo<br><em>přečte z výzvy.</em></h2>
+    <div class="vis"><div class="card">
+      <div class="card-top"><span>vyzva_k_uhrade.pdf</span><span class="pill ok" id="p2">načteno</span></div>
+      <div class="doc">
+        <h3>Výzva k úhradě</h3>
+        <i class="skl" style="width:78%"></i><i class="skl" style="width:62%"></i>
+        Podací číslo: <span id="rrsrc">RR 48 20 157 36 2 F</span>
+        <i class="skl" style="width:70%"></i>
+      </div>
+      <div id="chip"><small>podací číslo</small>RR4820157362F</div>
+    </div></div>
+  </section>
+
+  <!-- 3 · find it -->
+  <section class="sc" id="s3">
+    <div class="kick">Krok 2</div>
+    <h2 class="head">OCR ho najde<br><em>v podacím archu.</em></h2>
+    <div class="vis"><div class="card">
+      <div class="card-top"><span>podaci_arch.pdf</span><span class="pill ok" id="p3">strana 14 · nalezeno</span></div>
+      <div class="rows" id="rows3"></div>
+      <div class="scan" id="scan3"></div>
+    </div></div>
+  </section>
+
+  <!-- 4 · pseudonymise -->
+  <section class="sc" id="s4">
+    <div class="kick">Krok 3</div>
+    <h2 class="head">Citlivé údaje zakryje<br><em>dřív, než je uvidí AI.</em></h2>
+    <div class="vis"><div class="card">
+      <div class="card-top"><span>pseudonymizace</span><span class="pill ok" id="p4">zakryto</span></div>
+      <div class="doc" style="line-height:2.25">
+        Dlužník: <span class="tk"><span class="a">Jan Novák</span><span class="b">[OSOBA_1]</span></span>,<br>
+        nar. <span class="tk"><span class="a">12. 4. 1985</span><span class="b">[DATUM_1]</span></span>,<br>
+        bytem <span class="tk"><span class="a">Lipová 14, Brno</span><span class="b">[ADRESA_1]</span></span>,<br>
+        e-mail <span class="tk"><span class="a">jan.novak@example.cz</span><span class="b">[EMAIL_1]</span></span>
+      </div>
+      <div id="lock"><span>běží ve vaší síti</span><span style="color:var(--mint)">0 bajtů ven</span></div>
+    </div></div>
+  </section>
+
+  <!-- 5 · file it -->
+  <section class="sc" id="s5">
+    <div class="kick">Krok 4</div>
+    <h2 class="head">Výsledek uloží<br><em>rovnou do spisu.</em></h2>
+    <div class="vis"><div class="card">
+      <div class="card-top"><span>Spisový systém</span><span class="pill ok">nahráno</span></div>
+      <div class="files">
+        <div class="file"><i class="ck">✓</i>arch_str14_vyznaceno.pdf<span class="sp">spis 0412</span></div>
+        <div class="file"><i class="ck">✓</i>arch_str08_vyznaceno.pdf<span class="sp">spis 0413</span></div>
+        <div class="file"><i class="ck">✓</i>arch_str51_vyznaceno.pdf<span class="sp">spis 0414</span></div>
+        <div class="file"><i class="ck">✓</i>arch_str27_vyznaceno.pdf<span class="sp">spis 0415</span></div>
+      </div>
+      <div id="zero"><b>0</b><span>ručních kroků</span></div>
+    </div></div>
+  </section>
+
+  <!-- 6 · end card -->
+  <section class="sc" id="s6">
+    <div class="big">Kolik hodin týdně vám žere <em>rutina?</em></div>
+    <p>Napište nám, co vás zdržuje. Řekneme na rovinu, jestli to umíme zautomatizovat.</p>
+    <div id="cta">Napište nám <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    <div id="url">ai<b>1st</b><i>.cz</i></div>
+  </section>
+
+  <div id="note">Ilustrační ukázka s vymyšlenými údaji.</div>
+  <div id="bar"><i></i></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(() => {
+  /* fit the 1080x1350 stage into the window */
+  const stage = document.getElementById('stage');
+  const fit = () => { stage.style.transform = `scale(${Math.min(innerWidth/1080, innerHeight/1350)})`; };
+  fit(); addEventListener('resize', fit);
+
+  /* fake rows of a scanned mailing sheet (made-up numbers) */
+  const TARGET = 'RR4820157362F';
+  const fake = i => 'RR' + String(4820157362 + (i*7919 + 104729) % 900000 - 450000) + 'F';
+  const rows = (id, n, targetAt) => {
+    const el = document.getElementById(id);
+    for (let i = 0; i < n; i++) {
+      const hit = i === targetAt;
+      el.insertAdjacentHTML('beforeend',
+        `<div class="row${hit ? ' target' : ''}"><i class="hit"></i><span class="n">${String(i+1).padStart(2,'0')}</span><span class="rr">${hit ? TARGET : fake(i)}</span><i class="sk" style="width:${150 + (i*53)%160}px"></i><i class="sk" style="width:${60 + (i*31)%70}px"></i></div>`);
+    }
+  };
+  rows('rows1', 8, -1);
+  rows('rows3', 8, 5);
+
+  const OUT = 'expo.out';
+  const tl = gsap.timeline({paused:true, repeat:-1, defaults:{ease:OUT}});
+  const scene = (id, t0, t1) => {
+    tl.fromTo(id, {opacity:0}, {opacity:1, duration:.25, ease:'none'}, t0)
+      .fromTo(`${id} .kick, ${id} .head`, {y:26, opacity:0}, {y:0, opacity:1, duration:.55, stagger:.06}, t0)
+      .fromTo(`${id} .vis`, {y:40, opacity:0}, {y:0, opacity:1, duration:.6}, t0 + .12);
+    if (t1) tl.to(id, {opacity:0, duration:.2, ease:'none'}, t1 - .2);
+  };
+
+  /* 1 · 0.0–2.8  the manual hunt: a lens crawling down the sheet */
+  scene('#s1', 0, 2.8);
+  tl.fromTo('#lens', {y:0}, {y:336, duration:2.1, ease:'steps(6)'}, .5);
+
+  /* 2 · 2.8–5.4  read the number off the notice */
+  scene('#s2', 2.8, 5.4);
+  tl.fromTo('#rrsrc', {backgroundColor:'rgba(52,245,197,0)', color:'rgba(255,255,255,.72)'}, {backgroundColor:'rgba(52,245,197,.18)', color:'#34f5c5', duration:.3}, 3.7)
+    .fromTo('#p2', {opacity:0}, {opacity:1, duration:.2}, 3.9)
+    .fromTo('#chip', {y:30, opacity:0, scale:.94}, {y:0, opacity:1, scale:1, duration:.45}, 4.05);
+
+  /* 3 · 5.4–8.2  scan the sheet, highlight the row */
+  scene('#s3', 5.4, 8.2);
+  tl.fromTo('#scan3', {y:0, opacity:.9}, {y:456, opacity:.9, duration:.9, ease:'none'}, 6.0)
+    .to('#scan3', {opacity:0, duration:.15}, 6.9)
+    .fromTo('#s3 .target .hit', {scaleX:0, opacity:1}, {scaleX:1, opacity:1, duration:.4}, 6.9)
+    .fromTo('#s3 .target', {color:'rgba(255,255,255,.62)'}, {color:'#111111', duration:.2}, 6.95)
+    .fromTo('#s3 .target .sk', {backgroundColor:'rgba(255,255,255,.1)'}, {backgroundColor:'rgba(0,0,0,.28)', duration:.2}, 6.95)
+    .fromTo('#s3 .target .n', {color:'rgba(255,255,255,.35)'}, {color:'rgba(0,0,0,.55)', duration:.2}, 6.95)
+    .fromTo('#p3', {opacity:0}, {opacity:1, duration:.2}, 7.1);
+
+  /* 4 · 8.2–10.8  personal data swapped for placeholders */
+  scene('#s4', 8.2, 10.8);
+  document.querySelectorAll('#s4 .tk').forEach((tk, i) => {
+    const t = 9.0 + i * .22;
+    tl.fromTo(tk.querySelector('.a'), {opacity:1}, {opacity:0, duration:.18, ease:'none'}, t)
+      .fromTo(tk.querySelector('.b'), {opacity:0}, {opacity:1, duration:.18, ease:'none'}, t + .08)
+      .fromTo(tk, {backgroundColor:'rgba(255,90,120,.12)', borderColor:'rgba(255,90,120,.35)'}, {backgroundColor:'rgba(52,245,197,.1)', borderColor:'rgba(52,245,197,.4)', duration:.25}, t);
+  });
+  tl.fromTo('#p4', {opacity:0}, {opacity:1, duration:.2}, 9.95);
+
+  /* 5 · 10.8–13.2  results land in the case file */
+  scene('#s5', 10.8, 13.2);
+  tl.fromTo('#s5 .file', {x:-24, opacity:0}, {x:0, opacity:1, duration:.35, stagger:.16}, 11.4)
+    .fromTo('#zero', {y:20, opacity:0}, {y:0, opacity:1, duration:.45}, 12.15);
+
+  /* 6 · 13.2–16.0  end card */
+  tl.fromTo('#s6', {opacity:0}, {opacity:1, duration:.25, ease:'none'}, 13.2)
+    .fromTo('#s6 .big', {y:40, opacity:0}, {y:0, opacity:1, duration:.6}, 13.2)
+    .fromTo('#s6 p', {y:24, opacity:0}, {y:0, opacity:1, duration:.5}, 13.45)
+    .fromTo('#cta', {scale:.94, opacity:0}, {scale:1, opacity:1, duration:.45}, 13.75)
+    .fromTo('#url', {opacity:0}, {opacity:1, duration:.4, ease:'none'}, 14.0)
+    .fromTo('#tag, #logo', {opacity:1}, {opacity:0, duration:.2, ease:'none'}, 13.2)
+    .to('#s6', {opacity:0, duration:.25, ease:'none'}, 15.75)
+    .fromTo('#bar i', {scaleX:0}, {scaleX:1, duration:16, ease:'none'}, 0);
+
+  /* ?t=7.2 freezes one frame, window.seek(t) is used for frame-by-frame export */
+  window.DURATION = 16;
+  window.seek = t => { tl.pause(); tl.time(t); };
+  const q = new URLSearchParams(location.search);
+  const start = () => q.has('t') ? window.seek(parseFloat(q.get('t'))) : tl.play(0);
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(start);
+})();
+</script>
+</body>
+</html>

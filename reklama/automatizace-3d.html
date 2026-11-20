@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ai1st.cz – 3D reklama: automatizace spisů (4:5, 16 s)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap&subset=latin-ext" rel="stylesheet">
+<style>
+  :root{--mint:#34f5c5;--ink:#07080b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden}
+  #stage{position:absolute;left:50%;top:50%;width:1080px;height:1350px;margin:-675px 0 0 -540px;background:var(--ink);color:#eef0f5;font-family:Inter,system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+  #gl{position:absolute;inset:0;width:1080px;height:1350px;display:block}
+  #scrim{position:absolute;left:0;right:0;top:0;height:470px;background:linear-gradient(to bottom,#07080b 0,rgba(7,8,11,.96) 335px,rgba(7,8,11,0) 100%)}
+  #veil{position:absolute;inset:0;background:var(--ink);opacity:0}
+  #logo{position:absolute;left:72px;top:64px;font:700 40px "Space Grotesk",sans-serif;letter-spacing:-.02em}
+  #logo b{color:var(--mint)} #logo i{font-style:normal;opacity:.5}
+  #tag{position:absolute;right:72px;top:74px;font:500 22px "JetBrains Mono",monospace;color:rgba(255,255,255,.6)}
+  .cap{position:absolute;left:72px;right:72px;top:172px;opacity:0}
+  .cap .kick{font:500 26px "JetBrains Mono",monospace;color:var(--mint);margin-bottom:18px}
+  .cap h2{font:700 84px/1.03 "Space Grotesk",sans-serif;letter-spacing:-.035em}
+  .cap h2 em{font-style:normal;color:var(--mint)}
+  #done{position:absolute;right:72px;top:560px;padding:14px 26px;border-radius:999px;border:1px solid rgba(52,245,197,.5);background:rgba(7,8,11,.7);color:var(--mint);font:500 26px "JetBrains Mono",monospace;opacity:0}
+  #note{position:absolute;left:72px;bottom:92px;font:400 20px "JetBrains Mono",monospace;color:rgba(255,255,255,.5)}
+  #bar{position:absolute;left:72px;right:72px;bottom:64px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+  #bar i{display:block;height:100%;background:var(--mint);transform-origin:0 50%;transform:scaleX(0)}
+  /* end card */
+  #end{position:absolute;inset:0;opacity:0}
+  #end .n{position:absolute;left:60px;top:210px;font:700 400px/.9 "Space Grotesk",sans-serif;letter-spacing:-.06em;color:var(--mint)}
+  #end .n small{font-size:140px;letter-spacing:-.03em;margin-left:14px}
+  #end h2{position:absolute;left:72px;top:620px;font:700 76px/1.05 "Space Grotesk",sans-serif;letter-spacing:-.035em}
+  #end p{position:absolute;left:72px;right:120px;top:740px;font:400 34px/1.4 Inter,sans-serif;color:rgba(255,255,255,.72)}
+  #cta{position:absolute;left:72px;top:930px;display:inline-flex;gap:16px;padding:28px 46px;border-radius:999px;background:var(--mint);color:var(--ink);font:600 38px "Space Grotesk",sans-serif}
+  #url{position:absolute;left:72px;top:1080px;font:700 60px "Space Grotesk",sans-serif;letter-spacing:-.03em}
+  #url b{color:var(--mint)} #url i{font-style:normal;opacity:.5}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="1080" height="1350"></canvas>
+  <div id="scrim"></div>
+  <div id="veil"></div>
+  <div id="logo">ai<b>1st</b><i>.cz</i></div>
+  <div id="tag">automatizace pro advokátní kanceláře</div>
+
+  <div class="cap" data-a="0" data-b="3"><div class="kick">Znáte to?</div><h2>Stovky skenů.<br><em>Jedno číslo.</em></h2></div>
+  <div class="cap" data-a="3" data-b="6"><div class="kick">Krok 1</div><h2>OCR přečte<br><em>každou stranu.</em></h2></div>
+  <div class="cap" data-a="6" data-b="8.6"><div class="kick">Krok 2</div><h2>Najde ten<br><em>správný řádek.</em></h2></div>
+  <div class="cap" data-a="8.6" data-b="11"><div class="kick">Krok 3</div><h2 style="font-size:72px">Citlivé údaje zakryje<br><em>dřív, než je uvidí AI.</em></h2></div>
+  <div class="cap" data-a="11" data-b="13.5"><div class="kick">Krok 4</div><h2>Uloží ho<br><em>rovnou do spisu.</em></h2></div>
+
+  <div id="done">✓ uloženo do spisu</div>
+  <div id="end">
+    <div class="n">70<small>h</small></div>
+    <h2>práce měsíčně ušetřeno.</h2>
+    <p>Jedné advokátní kanceláři, u tisíců případů měsíčně. Co děláte pořád dokola ručně vy?</p>
+    <div id="cta">Napište nám →</div>
+    <div id="url">ai<b>1st</b><i>.cz</i></div>
+  </div>
+  <div id="note">Ilustrační ukázka s vymyšlenými údaji.</div>
+  <div id="bar"><i></i></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(async () => {
+  const W = 1080, H = 1350, DUR = 16;
+  const stage = document.getElementById('stage');
+  const fit = () => { stage.style.transform = `scale(${Math.min(innerWidth/W, innerHeight/H)})`; };
+  fit(); addEventListener('resize', fit);
+
+  /* fonts must be ready before text is painted into textures */
+  await Promise.all(['500 44px "JetBrains Mono"', '700 60px "Space Grotesk"', '500 40px Inter'].map(f => document.fonts.load(f, 'RŘ1')));
+  await document.fonts.ready;
+
+  /* ---------- helpers ---------- */
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const seg = (t, a, b) => clamp((t - a) / (b - a));
+  const lerp = (a, b, k) => a + (b - a) * k;
+  const io = k => k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3) / 2;      /* ease-in-out: things moving on screen */
+  const out = k => k >= 1 ? 1 : 1 - Math.pow(2, -10 * k);                /* strong ease-out: things arriving */
+  const wrap = a => Math.atan2(Math.sin(a), Math.cos(a));
+
+  /* ---------- textures ---------- */
+  const TW = 1024, TH = 1448, ROWS = 10, ROW0 = 250, ROWH = 112, HIT = 5;
+  const NAMES = ['Petr Dvořák','Jana Svobodová','Tomáš Černý','Eva Procházková','Martin Kučera','Jan Novák','Lucie Veselá','Pavel Horák','Marie Němcová','Jiří Marek'];
+  const rr = i => i === HIT ? 'RR4820157362F' : 'RR' + String(4820157362 + (i*7919 + 104729) % 900000 - 450000) + 'F';
+  const canvasTex = (w, h, draw) => {
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    draw(c.getContext('2d'));
+    const t = new THREE.CanvasTexture(c); t.anisotropy = 8; return t;
+  };
+  const pageTex = canvasTex(TW, TH, g => {
+    g.fillStyle = '#f3f2ed'; g.fillRect(0, 0, TW, TH);
+    g.fillStyle = '#15171c'; g.font = '700 60px "Space Grotesk"'; g.fillText('Podací arch', 70, 120);
+    g.fillStyle = '#8a8d94'; g.font = '500 30px "JetBrains Mono"'; g.fillText('strana 14 / 312', 70, 176);
+    g.fillStyle = '#d5d4ce'; g.fillRect(70, 210, TW - 140, 3);
+    for (let i = 0; i < ROWS; i++) {
+      const y = ROW0 + i * ROWH;
+      g.fillStyle = '#23262d'; g.font = '500 44px "JetBrains Mono"'; g.fillText(rr(i), 70, y + 72);
+      g.fillStyle = '#3a3d45'; g.font = '500 40px Inter'; g.fillText(NAMES[i], 500, y + 70);
+      g.fillStyle = '#dedcd6'; g.fillRect(70, y + ROWH - 2, TW - 140, 2);
+    }
+  });
+  const labelTex = i => canvasTex(472, 76, g => {
+    g.fillStyle = '#0d2b26'; g.fillRect(0, 0, 472, 76);
+    g.strokeStyle = '#34f5c5'; g.lineWidth = 4; g.strokeRect(2, 2, 468, 72);
+    g.fillStyle = '#34f5c5'; g.font = '500 40px "JetBrains Mono"'; g.fillText(`[OSOBA_${i + 1}]`, 22, 53);
+  });
+  const folderTex = canvasTex(880, 600, g => {
+    g.fillStyle = '#11151c'; g.fillRect(0, 0, 880, 600);
+    g.fillStyle = '#34f5c5'; g.font = '500 44px "JetBrains Mono"'; g.fillText('SPIS', 60, 110);
+    g.fillStyle = '#eef0f5'; g.font = '700 150px "Space Grotesk"'; g.fillText('0412', 52, 270);
+    g.fillStyle = 'rgba(255,255,255,.14)'; g.fillRect(60, 340, 520, 16); g.fillRect(60, 390, 380, 16);
+  });
+
+  /* ---------- scene ---------- */
+  const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('gl'), antialias: true, preserveDrawingBuffer: true});
+  renderer.setPixelRatio(1); renderer.setSize(W, H, false); renderer.setClearColor(0x07080b);
+  const scene = new THREE.Scene(); scene.fog = new THREE.Fog(0x07080b, 8, 21);
+  const camera = new THREE.PerspectiveCamera(35, W / H, .1, 60);
+  camera.setViewOffset(W, H, 0, -175, W, H);   /* push the 3D action below the headline */
+  scene.add(new THREE.AmbientLight(0xffffff, .62));
+  const key = new THREE.DirectionalLight(0xffffff, .55); key.position.set(3, 5, 8); scene.add(key);
+  const glow = new THREE.PointLight(0x34f5c5, .9, 14); glow.position.set(-3, 1, 4); scene.add(glow);
+
+  const MINT = new THREE.MeshBasicMaterial({color: 0x34f5c5});
+  const PW = 2, PH = 2 * TH / TW;
+  const px = x => (x / TW - .5) * PW, py = y => (.5 - y / TH) * PH;
+
+  /* cloud of scanned pages */
+  const N = 44, HERO = 20;
+  const pageGeo = new THREE.PlaneGeometry(PW, PH);
+  const dimMat = new THREE.MeshLambertMaterial({map: pageTex, side: THREE.DoubleSide});
+  const heroMat = new THREE.MeshLambertMaterial({map: pageTex, side: THREE.DoubleSide});
+  const pages = [];
+  for (let i = 0; i < N; i++) {
+    const m = i === HERO ? new THREE.Group() : new THREE.Mesh(pageGeo, dimMat);
+    if (i === HERO) m.add(new THREE.Mesh(pageGeo, heroMat));
+    scene.add(m); pages.push(m);
+  }
+  const hero = pages[HERO];
+  const cloud = (i, t) => {
+    const a = i * .9 + t * .18, r = 2.6 + (i % 4) * .5;
+    return {x: Math.cos(a) * r, y: (i / (N - 1) - .5) * 8 + Math.sin(i * 1.7 + t * .6) * .15, z: Math.sin(a) * r - 3.5,
+            ry: wrap(-a + Math.PI / 2 + .3), rx: Math.sin(i * 2.3) * .25, rz: Math.sin(i * 1.1) * .2};
+  };
+
+  /* dust for depth */
+  const dustGeo = new THREE.BufferGeometry(), dp = [];
+  for (let i = 0; i < 320; i++) { const s = n => Math.sin(i * n) * 43758.5453 % 1; dp.push(s(12.9898) * 9, s(78.233) * 9, s(39.425) * 7 - 2); }
+  dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dp, 3));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({color: 0x34f5c5, size: .035, transparent: true, opacity: .55}));
+  scene.add(dust);
+
+  /* scan gate sweeping through the cloud */
+  const gate = new THREE.Group(); scene.add(gate);
+  const G = 9.5, bar = (w, d) => new THREE.Mesh(new THREE.BoxGeometry(w, .035, d), MINT);
+  [[G, .035, 0, G/2], [G, .035, 0, -G/2], [.035, G, G/2, 0], [.035, G, -G/2, 0]].forEach(([w, d, x, z]) => { const b = bar(w, d); b.position.set(x, 0, z); gate.add(b); });
+  const sheet = new THREE.Mesh(new THREE.PlaneGeometry(G, G), new THREE.MeshBasicMaterial({color: 0x34f5c5, transparent: true, opacity: .07, side: THREE.DoubleSide, depthWrite: false}));
+  sheet.rotation.x = Math.PI / 2; gate.add(sheet); gate.position.z = -3.5;
+
+  /* hero page overlays: scan line, yellow highlight, pseudonymisation labels, shield */
+  const scanLine = new THREE.Mesh(new THREE.BoxGeometry(PW + .06, .022, .01), MINT); scanLine.position.z = .02; hero.add(scanLine);
+  const hiH = ROWH / TH * PH, hiGeo = new THREE.PlaneGeometry(PW, hiH); hiGeo.translate(PW / 2, 0, 0);
+  const hi = new THREE.Mesh(hiGeo, new THREE.MeshBasicMaterial({color: 0xffe14d, transparent: true, blending: THREE.MultiplyBlending, depthWrite: false}));
+  hi.position.set(-PW / 2, py(ROW0 + HIT * ROWH + ROWH / 2), .006); hero.add(hi);
+  const LW = 472 / TW * PW, LH = 76 / TH * PH, LX = px(488);
+  const labels = [];
+  for (let i = 0; i < ROWS; i++) {
+    const g = new THREE.PlaneGeometry(LW, LH); g.translate(LW / 2, 0, 0);
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({map: labelTex(i)}));
+    m.position.set(LX, py(ROW0 + i * ROWH + 56), .012); hero.add(m); labels.push(m);
+  }
+  const shield = new THREE.Group(); shield.position.z = .16; hero.add(shield);
+  shield.add(new THREE.Mesh(new THREE.BoxGeometry(.022, PH + .5, .01), MINT));
+  const trail = new THREE.Mesh(new THREE.PlaneGeometry(.7, PH + .5), new THREE.MeshBasicMaterial({color: 0x34f5c5, transparent: true, opacity: .13, depthWrite: false}));
+  trail.position.x = -.35; shield.add(trail);
+
+  /* the case folder */
+  const folder = new THREE.Group(); scene.add(folder);
+  const FW = 1.75, FH = 1.05, FD = .45, body = new THREE.MeshLambertMaterial({color: 0x161b23}), none = new THREE.MeshBasicMaterial({visible: false});
+  const box = new THREE.Mesh(new THREE.BoxGeometry(FW, FH, FD), [body, body, none, body, new THREE.MeshLambertMaterial({map: folderTex}), body]);
+  folder.add(box);
+  folder.add(new THREE.LineSegments(new THREE.EdgesGeometry(box.geometry), new THREE.LineBasicMaterial({color: 0x34f5c5})));
+
+  /* ---------- DOM ---------- */
+  const caps = [...document.querySelectorAll('.cap')].map(el => ({el, a: +el.dataset.a, b: +el.dataset.b}));
+  const $ = id => document.getElementById(id);
+  const veil = $('veil'), end = $('end'), done = $('done'), note = $('note'), barFill = document.querySelector('#bar i'), logo = $('logo'), tag = $('tag');
+
+  /* ---------- one frame, fully determined by t ---------- */
+  function frame(t) {
+    t = ((t % DUR) + DUR) % DUR;
+    const toHero = io(seg(t, 3.6, 5.4)), recede = io(seg(t, 4.4, 6)), lift = io(seg(t, 11, 11.8)), drop = io(seg(t, 11.9, 12.8));
+
+    for (let i = 0; i < N; i++) {
+      const c = cloud(i, t), m = pages[i];
+      if (i === HERO) {
+        m.position.set(lerp(c.x, 0, toHero), lerp(lerp(lerp(c.y, .05, toHero), .55, lift), -.12, drop), lerp(c.z, 2.5, toHero));
+        m.rotation.set(lerp(c.rx, 0, toHero) - Math.sin(lift * Math.PI) * .3, lerp(c.ry, 0, toHero), lerp(c.rz, 0, toHero));
+        m.scale.setScalar(lerp(.8, .55, lift));
+      } else {
+        m.position.set(c.x * (1 + .5 * recede), c.y, c.z - 5 * recede);
+        m.rotation.set(c.rx, c.ry, c.rz); m.scale.setScalar(.8);
+      }
+    }
+    dimMat.color.setScalar(lerp(.78, .3, recede));
+    dust.rotation.y = t * .05;
+
+    const gk = seg(t, 3, 5);
+    gate.visible = gk > 0 && gk < 1; gate.position.y = lerp(5.4, -5.4, gk);
+
+    const sk = seg(t, 6.3, 7.3);
+    scanLine.visible = sk > 0 && sk < 1; scanLine.position.y = lerp(PH / 2, -PH / 2, sk);
+    const hk = out(seg(t, 7.15, 7.7)); hi.visible = hk > 0; hi.scale.x = Math.max(hk, .0001);
+
+    const shk = seg(t, 8.9, 10.3), sx = lerp(-1.25, 1.25, shk);
+    shield.visible = shk > 0 && shk < 1; shield.position.x = sx;
+    labels.forEach(l => { const k = t < 8.9 ? 0 : clamp((sx - LX) / LW); l.visible = k > 0; l.scale.x = Math.max(k, .0001); });
+
+    folder.position.set(0, lerp(-3.4, -.42, out(seg(t, 11, 11.9))), 2.5);
+    folder.visible = t >= 11;
+
+    const push = io(seg(t, 6, 8.4));
+    camera.position.set(Math.sin(t * .22) * 1.1 * (1 - toHero), .3, lerp(9.2, 8.5, push));
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+
+    caps.forEach(c => {
+      const o = Math.min(seg(t, c.a, c.a + .35), 1 - seg(t, c.b - .22, c.b));
+      c.el.style.opacity = o; c.el.style.transform = `translateY(${(1 - out(seg(t, c.a, c.a + .6))) * 24}px)`;
+    });
+    const e = seg(t, 13.5, 14), fadeOut = 1 - seg(t, 15.75, 16);
+    veil.style.opacity = e * .975;
+    end.style.opacity = Math.min(e, fadeOut); end.style.transform = `translateY(${(1 - out(seg(t, 13.5, 14.2))) * 30}px)`;
+    logo.style.opacity = tag.style.opacity = 1 - e;
+    done.style.opacity = Math.min(seg(t, 12.85, 13.05), 1 - seg(t, 13.3, 13.5));
+    note.textContent = t >= 13.5 ? 'Údaj advokátní kanceláře, která nástroj používá.' : 'Ilustrační ukázka s vymyšlenými údaji.';
+    barFill.style.transform = `scaleX(${t / DUR})`;
+  }
+
+  /* ?t=7.2 freezes one frame; window.seek(t) drives frame-by-frame export */
+  window.DURATION = DUR; window.seek = frame; window.ready = true;
+  const q = new URLSearchParams(location.search);
+  if (q.has('t')) frame(parseFloat(q.get('t')));
+  else { const t0 = performance.now(); const loop = () => { frame((performance.now() - t0) / 1000); requestAnimationFrame(loop); }; loop(); }
+})();
+</script>
+</body>
+</html>
